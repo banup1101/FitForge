@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Body Workout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('Media/workout_tutorials_background3.jpeg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        header, footer {
+            background-color: black;
+            color: dodgerblue;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+
+        .video-container {
+            display: none;
+        }
+
+            .video-container iframe {
+                width: 100%;
+                height: 300px;
+            }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            color: #007bff;
+            text-decoration: underline; /* Underline the headings */
+        }
+
+        nav {
+            background-color: dodgerblue;
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 30px; /* Adjusted top padding */
+            left: -200px;
+            transition: left 0.3s ease;
+        }
+
+            nav.open {
+                left: 0;
+            }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                margin: 10px 10px 0; /* Adjusted margin */
+                display: block;
+                padding: 10px 0;
+            }
+
+        .menu-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Upper/Lower</h1>
+    </header>
+
+    <button class="menu-button" onclick="toggleNav()">Menu</button>
+
+    <nav id="sideNav">
+        <a href="home.html">Home</a>
+        <a href="getting_started.html">Getting Started</a>
+        <a href="Dashboard.html">Dashboard</a>
+        <a href="BMI_Calculator.html">BMI Calculator</a>
+        <a href="workout_tracker.html">Workout Tracker</a>
+        <a href="calorie_tracker.html">Calorie Tracker</a>
+        <a href="hydration_tracker.html">Hydration Tracker</a>
+        <a href="sleep_tracker.html">Sleep Tracker</a>
+        <a href="goals_page.html">Goals</a>
+        <a href="about_us.html">About Us</a>
+    </nav>
+
+    <main>
+
+        <p style="font-size: 1.4em;"><strong><u>Don't know how to do an exercise? Click an exercise below for a tutorial.</u></strong></p>
+
+        <h2>Upper Body Exercises</h2>
+        <ul>
+            <li>Bench Press</li>
+            <li>Pull-Ups/Chin-Ups</li>
+            <li>Shoulder Press</li>
+            <li>Push-Ups</li>
+            <li onclick="toggleVideo('latPulldown')">
+                Lat Pulldown
+                <div id="latPulldown" class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/XUAhid_2jzE" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </li>
+            <li>Bent Over Rows</li>
+            <li>Chest Flyes</li>
+            <li>Tricep Extensions</li>
+            <li onclick="toggleVideo('hammerCurls')">
+                Bicep Curls
+                <div id="hammerCurls" class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/8VUXJPTB2ro" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </li>
+        </ul>
+
+        <h2>Lower Body Exercises</h2>
+        <ul>
+            <li onclick="toggleVideo('squats')">
+                Squats
+                <div id="squats" class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/r--GizA8FzU" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </li>
+            <li>Lunges</li>
+            <li>Leg Press</li>
+            <li>Leg Curls</li>
+            <li>Leg Extensions</li>
+            <li>Calf Raises</li>
+            <li onclick="toggleVideo('romanianDeadlifts')">
+                Romanian Deadlifts (RDL's)
+                <div id="romanianDeadlifts" class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/_CYKepEsYq0" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </li>
+        </ul>
+
+        <h2>Core Exercises</h2>
+        <ul>
+            <li>Crunches</li>
+            <li>Russian Twists</li>
+            <li>Leg Raises</li>
+            <li>Mountain Climbers</li>
+            <li>Bicycle Crunches</li>
+            <li>Reverse Crunches</li>
+            <li>Planks</li>
+        </ul>
+    </main>
+
+    <script>
+
+        function toggleVideo(videoId) {
+            var videoContainer = document.getElementById(videoId);
+            if (videoContainer.style.display === "block") {
+                videoContainer.style.display = "none";
+            } else {
+                videoContainer.style.display = "block";
+            }
+        }
+
+        // Toggle sidebar function
+        function toggleNav() {
+            document.getElementById("sideNav").classList.toggle("open");
+        }
+
+        // Close sidebar when clicking outside of it
+        document.addEventListener('click', function (event) {
+            var sideNav = document.getElementById("sideNav");
+            var menuButton = document.querySelector('.menu-button');
+            var isClickInsideNav = sideNav.contains(event.target);
+            var isClickInsideButton = menuButton.contains(event.target);
+            if (!isClickInsideNav && !isClickInsideButton) {
+                sideNav.classList.remove('open');
+            }
+        });
+
+
+
+    </script>
+
+</body>
+</html>

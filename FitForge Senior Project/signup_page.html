@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitForge Sign Up Page</title>
+
+    <style>
+        body {
+            text-align: center;
+            background-color: black;
+        }
+
+        #enterDetails {
+            margin: 0 auto;
+            width: 100%;
+            background-color: dodgerblue;
+            color: floralwhite;
+        }
+
+        input {
+            width: 120px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="enterDetails">
+        <h1>FitForge Sign Up Page</h1>
+        <!--Incrementing the ID numbers were too annoying dont think it'll get used anyways-->
+        <!--
+        <h4>ID</h4>
+        <input id = "enterID" type = "text"> -->
+
+        <h4>Username</h4>
+        <input id="enterUsername" type="text" pattern="^[a-zA-Z0-9_.-]*$" required>
+
+        <h4>Password</h4>
+        <input id="enterPassword" type="password" required>
+
+        <h4>Email</h4>
+        <input id="enterEmail" type="text" required> <br><br>
+
+        <button id="insert">Submit</button>
+
+        <p>Already have an account? <a href="login.html">Log in</a></p>
+    </div>
+
+
+
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        // Firebase Database
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBW3CX2hQ-yPA_FgE4i_EEWfh3t7WlSo10",
+            authDomain: "fitforge-e1aad.firebaseapp.com",
+            databaseURL: "https://fitforge-e1aad-default-rtdb.firebaseio.com",
+            projectId: "fitforge-e1aad",
+            storageBucket: "fitforge-e1aad.appspot.com",
+            messagingSenderId: "906048640159",
+            appId: "1:906048640159:web:a35fdf58a9d83edbd43eaa"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth();
+
+
+
+        var enterID = document.querySelector("#enterID");
+        var enterUsername = document.querySelector("#enterUsername");
+        var enterPassword = document.querySelector("#enterPassword");
+        var enterEmail = document.querySelector("#enterEmail");
+
+        var findID = document.querySelector("#findID");
+        var findUsername = document.querySelector("#findUsername");
+        var findPassword = document.querySelector("#findPassword");
+        var findEmail = document.querySelector("#findEmail");
+
+        var insertButton = document.querySelector("#insert")
+
+
+        var currentUser = {};
+
+        function createNewUser(email, password) {
+            const auth = getAuth();
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed up
+                    const user = userCredential.user;
+                    // ...
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log(error.message);
+                    alert(error.message)
+                });
+        }
+
+
+
+        //the following function inserts a user in the database
+
+        async function insertData() {
+            try {
+                //auth is required i think
+                const auth = getAuth();
+                const userCredential = await createUserWithEmailAndPassword(auth, enterEmail.value, enterPassword.value);
+                const newUser = userCredential.user;
+
+
+                if (newUser) {
+                    const userID = newUser.uid;
+                    const usersRef = ref(db, 'Users/' + userID);
+                    //const newChildRef = push(usersRef);
+                    //const newID = newChildRef.key; //instead of generating an ID like 1 and auto incrementing, we'll just give the user a unique messy looking ID as a key (this is a firebase thing which is nice)
+
+                    //these are the values that are going into the database
+                    await set(usersRef, {
+                        Username: enterUsername.value,
+                        Password: enterPassword.value,
+                        Email: enterEmail.value
+                    });
+
+                    alert("Data Added Successfully!");
+                    window.location.href = "login.html";
+                }
+            } catch (error) {
+                alert("Oopsie something broke: ");
+                console.log(error);
+            }
+        }
+
+
+        /*
+        Event Listener, performs function onclick
+        */
+        insertButton.addEventListener("click", insertData);
+
+    </script>
+
+
+</body>
+
+</html>

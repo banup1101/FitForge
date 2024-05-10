@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with Gym Workouts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f3f3f3;
+            background-image: url('Media/workout_tutorials_background3.jpeg');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+        }
+
+        header {
+            background-color: black;
+            color: dodgerblue;
+            padding: 1em;
+            text-align: center;
+            position: relative;
+        }
+
+        nav {
+            background-color: dodgerblue;
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 30px;
+            /* Adjusted top padding */
+            left: -200px;
+            transition: left 0.3s ease;
+        }
+
+        nav.open {
+            left: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 10px 10px 0;
+            /* Adjusted margin */
+            display: block;
+            padding: 10px 0;
+        }
+
+        .menu-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        /* Add styles for split links */
+        .split-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .split-link strong {
+            text-decoration: underline;
+        }
+
+        .split-link:hover strong {
+            text-decoration: underline;
+        }
+
+        #getting-started-form {
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Getting Started with Gym Workouts</h1>
+    </header>
+
+    <button class="menu-button" onclick="toggleNav()">Menu</button>
+
+    <nav id="sideNav">
+        <a href="home.html">Home</a>
+        <a href="getting_started.html">Getting Started</a>
+        <a href="Dashboard.html">Dashboard</a>
+        <a href="BMI_Calculator.html">BMI Calculator</a>
+        <a href="workout_tracker.html">Workout Tracker</a>
+        <a href="calorie_tracker.html">Calorie Tracker</a>
+        <a href="hydration_tracker.html">Hydration Tracker</a>
+        <a href="sleep_tracker.html">Sleep Tracker</a>
+        <a href="goals_page.html">Goals</a>
+        <a href="about_us.html">About Us</a>
+    </nav>
+
+    <main>
+        <form id="getting-started-form">
+            <h2>Understanding Workout Splits</h2>
+            <p>A workout split refers to how you divide your training routine among different muscle groups over the
+                course of a week. Please select a split:</p>
+            <ul>
+                <!-- Wrap only the text inside each list item with anchor tags -->
+                <li><a href="specific_muscle_groups.html" class="split-link"><strong>Specific Muscle Group:</strong></a>
+                    Targets one specific muscle group on different days. This allows for focused training.</li>
+                <li><a href="upper_lower.html" class="split-link"><strong>Upper/Lower:</strong></a> Divides workouts
+                    into upper body and lower body sessions. It allows for more volume and intensity per muscle group.
+                </li>
+                <li><a href="push_pull_legs.html" class="split-link"><strong>Push/Pull/Legs:</strong></a> Separates
+                    workouts into push exercises (chest, shoulders, triceps), pull exercises (back, biceps), and leg
+                    exercises. This split provides adequate rest between muscle groups.</li>
+                <li><a href="arnold_split.html" class="split-link"><strong>Arnold Split:</strong></a> Divides the
+                    workouts into three different sections. Separating it by chest and back, shoulders and arms, and leg
+                    exercises.</li>
+            </ul>
+
+            <h2>How Often to Workout</h2>
+            <p>The frequency of your workouts depends on your fitness goals, experience level, and recovery ability.
+                Here are some general guidelines:</p>
+            <ul>
+                <li><strong>Beginners:</strong> Aim for 2-3 total body workouts per week with at least one day of rest
+                    between sessions to allow for recovery.</li>
+                <li><strong>Intermediate:</strong> 3-4 workouts per week with a mix of full-body or split routines,
+                    allowing for adequate rest days and recovery.</li>
+                <li><strong>Advanced:</strong> 4-6 workouts per week, incorporating more advanced training techniques
+                    and listening to your body's need for rest and recovery.</li>
+            </ul>
+        </form>
+    </main>
+
+    <script>
+        // Toggle sidebar function
+        function toggleNav() {
+            document.getElementById("sideNav").classList.toggle("open");
+        }
+
+        // Close sidebar when clicking outside of it
+        document.addEventListener('click', function (event) {
+            var sideNav = document.getElementById("sideNav");
+            var menuButton = document.querySelector('.menu-button');
+            var isClickInsideNav = sideNav.contains(event.target);
+            var isClickInsideButton = menuButton.contains(event.target);
+            if (!isClickInsideNav && !isClickInsideButton) {
+                sideNav.classList.remove('open');
+            }
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>

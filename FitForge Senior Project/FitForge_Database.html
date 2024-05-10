@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitForge Database</title>
+
+    <style>
+        body {
+            text-align: center;
+        }
+
+        #enterDetails {
+            float: left;
+            width: 50%;
+            background-color: dodgerblue;
+            color: floralwhite;
+        }
+
+        #findDetails {
+            float: left;
+            width: 50%;
+            background-color: floralwhite;
+            color: dodgerblue;
+        }
+
+        input {
+            width: 120px;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="enterDetails">
+        <h1>Enter Details </h1>
+        <h4>ID</h4>
+        <input id="enterID" type="text">
+
+        <h4>Username</h4>
+        <input id="enterUsername" type="text">
+
+        <h4>Password</h4>
+        <input id="enterPassword" type="password">
+
+        <h4>Email</h4>
+        <input id="enterEmail" type="text"> <br><br>
+
+        <button id="insert">INSERT</button>
+        <button id="update">UPDATE</button>
+        <button id="remove">REMOVE</button> <br><br>
+    </div>
+
+    <div id="findDetails">
+        <h1>Find by ID </h1>
+        <h4>ID</h4>
+        <input id="findID" type="text"> <br><br>
+        <button id="find">FIND</button>
+
+        <h3 id="findUsername" type="text"></h3>
+        <h3 id="findPassword" type="password"></h3>
+        <h3 id="findEmail" type="email"></h3>
+
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+        // Link to database: https://console.firebase.google.com/u/0/project/fitforge-e1aad/database/fitforge-e1aad-default-rtdb/data
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyBW3CX2hQ-yPA_FgE4i_EEWfh3t7WlSo10",
+          authDomain: "fitforge-e1aad.firebaseapp.com",
+          databaseURL: "https://fitforge-e1aad-default-rtdb.firebaseio.com",
+          projectId: "fitforge-e1aad",
+          storageBucket: "fitforge-e1aad.appspot.com",
+          messagingSenderId: "906048640159",
+          appId: "1:906048640159:web:a35fdf58a9d83edbd43eaa"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        import{getDatabase, set, get, update, remove, ref, child}
+        from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"
+
+
+        const db = getDatabase();
+
+        var enterID = document.querySelector("#enterID");
+        var enterUsername = document.querySelector("#enterUsername");
+        var enterPassword = document.querySelector("#enterPassword");
+        var enterEmail = document.querySelector("#enterEmail");
+
+        var findID = document.querySelector("#findID");
+        var findUsername = document.querySelector("#findUsername");
+        var findPassword = document.querySelector("#findPassword");
+        var findEmail = document.querySelector("#findEmail");
+
+        var insertButton = document.querySelector("#insert")
+        var updateButton = document.querySelector("#update")
+        var removeButton = document.querySelector("#remove")
+        var findButton = document.querySelector("#find")
+
+        function insertData(){
+            set(ref(db, "Users/" + enterID.value), { //this ref function is basically your folder structure in firebase
+                ID: enterID.value,
+                Username: enterUsername.value,
+                Password: enterPassword.value,
+                Email: enterEmail.value
+            })
+            .then(()=>{
+                alert("Data Added Successfully!");
+
+            })
+            .catch((error)=>{
+                alert("Oopsie something broke: " + error);
+            });
+        }
+
+        function updateData(){
+            update(ref(db, "Users/" + enterID.value),{
+                Username: enterUsername.value,
+                Password: enterPassword.value,
+                Email: enterID.value
+            })
+            .then(()=>{
+                alert("Data Successfully Updated! :D");
+            })
+            .catch((error)=>{
+                alert("Oopsie something broke: " + error);
+            });
+
+
+
+        }
+
+        function findData(){
+            const dbref = ref(db);
+
+            get(child(dbref, "Users/" + enterID.value))
+            .then((snapshot)=>{
+                if(snapshot.exists()){
+                    findUsername.innerHTML = "Name: " + snapshot.val().Username;
+                    findPassword.innerHTML = "Password: " + snapshot.val().Password;
+                    findEmail.innerHTML = "Email: " + snapshot.val().Email;
+                } else{
+                    alert("Data Not Found womp womp");
+                }
+            })
+            .catch((error)=>{
+                alert(error)
+            });
+        }
+
+
+        function removeData(){
+            remove(ref(db, "Users/" + enterID.value))
+            .then(()=>{
+                alert("Data has been succesfully removed!");
+            })
+            .catch((error)=>{
+                alert("Oopsie something broke: " + error);
+            });
+        }
+
+        /*
+        Event Listeners, perform function onclick
+        */
+        insertButton.addEventListener("click", insertData);
+        updateButton.addEventListener("click", updateData);
+        removeButton.addEventListener("click", removeData);
+        findButton.addEventListener("click", findData);
+
+    </script>
+
+
+</body>
+</html>

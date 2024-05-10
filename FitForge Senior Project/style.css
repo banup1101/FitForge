@@ -1,0 +1,112 @@
+*{
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+}
+.errors{
+	color: red;
+}
+.banner{
+	width: 100%;
+	height: 100vh;
+	background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),url(background.jpg);
+	background-size: cover;
+	background-position: center;
+	position: relative;
+	z-index: 0;
+}
+.navbar{
+	width: 85%;
+	margin: auto;
+	padding: 35px 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.logo{
+	width: 100px;
+	height: 100px;
+	cursor: pointer;
+}
+.navbar ul li{
+	list-style: none;
+	display: inline-block;
+	margin: 0 40px;
+	position: relative;
+}
+.navbar ul li a{
+	text-decoration: none;
+	color: #fff;
+	text-transform: uppercase;
+}
+.navbar ul li::after{
+	content: '';
+	height: 3px;
+	width: 0;
+	background: #141640;
+	position: absolute;
+	left: 0;
+	bottom: -10px;
+	transition: 0.2s;
+}
+.navbar ul li:hover::after{
+	width: 100%;
+}
+.content{
+	position: absolute;
+	top: 45%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding: 15px;
+	text-align: center;
+	color: #fff;
+	background: black;
+	border-radius: 5px;
+	box-shadow: #0c0a1a 0px 20px 30px -5px;
+}
+.content h1{
+	font-size: 70px;
+	margin-top: 80px;
+}
+.content p{
+	margin: 20px auto;
+	font-weight: 100;
+	line-height: 25px;
+}
+button{
+	width: 200px;
+	padding: 15px 0;
+	text-align: center;
+	margin: 20px 10px;
+	border-radius: 25px;
+	font-weight: bold;
+	border: 2px solid #141640;
+	background: transparent;
+	color: #fff;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	z-index: 1;
+}
+.fill{
+	background: #141640;
+	height: 100%;
+	width: 0;
+	border-radius: 25px;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	z-index: -1;
+	transition: 0.3s;
+}
+button:hover span{
+	width: 100%
+}
+button:hover{
+	border: none;
+}
+input{
+	outline: none;
+	border: none;
+	padding: 10px;
+}

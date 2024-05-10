@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select a Body Part</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-repeat: no-repeat;
+            background-image: url('Media/workout_tutorials_background3.jpeg'); 
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .textbox {
+            border: 2px solid black;
+            padding: 20px;
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .home-button {
+            background-color: dodgerblue;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+            .home-button:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+    <div class="textbox">
+        <h1>Select a Muscle Group</h1>
+        <form id="bodyPartForm">
+            <select id="bodypart" name="bodypart">
+                <option value="" disabled selected>Choose a Muscle Group</option>
+                <option value="chest">Chest</option>
+                <option value="back">Back</option>
+                <option value="shoulders">Shoulders</option>
+                <option value="biceps">Biceps</option>
+                <option value="triceps">Triceps</option>
+                <option value="abs">Abs</option>
+                <option value="legs">Legs</option>
+            </select>
+            <input type="submit" value="Submit">
+        </form>
+
+        <div id="chestExercises" style="display: none;">
+            <h2>Exercises for Chest</h2>
+            <ul>
+                <li>Bench Press</li>
+                <li>Incline Bench Press</li>
+                <li>Cable Flies</li>
+                <li>Dumbbell Flies</li>
+                <li>Dips</li>
+                <li>Pushups</li>
+                <!-- Add more exercises as needed -->
+            </ul>
+        </div>
+
+        <div id="backExercises" style="display: none;">
+            <h2>Exercises for Back</h2>
+            <ul>
+                <li>Deadlift</li>
+                <li>Lat Pulldown</li>
+                <li>Seated Rows</li>
+                <li>Bent Over Rows</li>
+                <li>T-Bar Rows</li>
+                <li>Lat Pullovers</li>
+                <li>Pullups</li>
+                <!-- Add more exercises as needed -->
+            </ul>
+        </div>
+
+        <div id="shouldersExercises" style="display: none;">
+            <h2>Exercises for Shoulders</h2>
+            <ul>
+                <li>Shoulder Press</li>
+                <li>Lateral Raises</li>
+                <li>Frontal Raises</li>
+                <li>Rear Deltoid Extensions</li>
+                <li>Face Pulls</li>
+                <!-- Add more exercises as needed -->
+            </ul>
+        </div>
+
+        <div id="bicepsExercises" style="display: none;">
+            <h2>Exercises for Biceps</h2>
+            <ul>
+                <li>Bicep Curls</li>
+                <li>Hammer Curls</li>
+                <li>Precher Curls</li>
+                <li>Spider Curls</li>
+                <li>Zottoman Curls</li>
+                <!-- Add more exercises as needed -->
+            </ul>
+        </div>
+
+        <div id="tricepsExercises" style="display: none;">
+            <h2>Exercises for Triceps</h2>
+            <ul>
+                <li>Tricep Rope Extensions</li>
+                <li>Tricep Kickbacks</li>
+                <li>Single Arm Cable Extensions</li>
+                <li>Overhead Extensions</li>
+                <li>Skull Crushers</li>
+                <li>Dips</li>
+                <!-- Add more exercises as needed -->
+            </ul>
+        </div>
+
+        <div id="absExercises" style="display: none;">
+            <h2>Exercises for Abs</h2>
+            <ul>
+                <li>Situps or Crunches</li>
+                <li>Leg Lifts</li>
+                <li>Flutter Kicks</li>
+                <li>Russian Twists</li>
+                <li>In and Outs</li>
+                <li>Heel Touches</li>
+                <li>Planks</li>
+                <!-- Add more exercises as needed -->
+            </ul>
+        </div>
+
+        <div id="legsExercises" style="display: none;">
+            <h2>Exercises for Legs</h2>
+            <ul>
+                <li>Barbell Squats</li>
+                <li>Hack Squats</li>
+                <li>Leg Extensions</li>
+                <li>Leg Curls</li>
+                <li>Leg Press</li>
+                <li>RDLS</li>
+                <li>Hip Aductors</li>
+                <li>Hip Abductors</li>
+                <!-- Add more exercises as needed -->
+            </ul>
+        </div>
+
+        <!-- Add similar divs for other body parts -->
+
+        <button class="home-button" onclick="goToHomePage()">Home</button>
+
+        <script>
+            document.getElementById('bodyPartForm').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent form submission
+                var selectedBodyPart = document.getElementById('bodypart').value;
+                var allExerciseDivs = document.querySelectorAll('[id$="Exercises"]');
+                allExerciseDivs.forEach(function (div) {
+                    div.style.display = 'none';
+                });
+                if (selectedBodyPart !== '') {
+                    document.getElementById(selectedBodyPart + 'Exercises').style.display = 'block';
+                }
+            });
+
+            function goToHomePage() {
+                // Assuming the home page URL is 'index.html', replace it with the actual home page URL
+                window.location.href = 'home.html';
+            }
+        </script>
+    </div>
+</body>
+</html>
+

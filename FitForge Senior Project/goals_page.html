@@ -1,0 +1,673 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<!--The Goals Page was worked on by Brandon Anup and John Calia
+    John originally created the Goals page and made it so you can add a goal to the database and it will be displayed in the bulleted list on the web page
+    
+    Brandon did the comparison of the goals with the Workout Tracker which means it kept track of how close the user was to completing their goal (and once this is done remove it from database) 
+    For example if you have a goal of 100 pushups and in the Workout Tracker you put 20, the goals page will update and say you have 80 more pushups to complete your goal-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goals</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('Media/workout_tutorials_background3.jpeg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        header {
+            background-color: black;
+            color: dodgerblue;
+            padding: 1em;
+            text-align: center;
+            position: relative;
+        }
+
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: black;
+        }
+
+        p {
+            line-height: 1.6;
+            color: black;
+        }
+
+        nav {
+            background-color: dodgerblue;
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 30px;
+            left: -200px;
+            transition: left 0.3s ease;
+        }
+
+        nav.open {
+            left: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 10px 10px 0;
+            display: block;
+            padding: 10px 0;
+        }
+
+        .menu-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        label {
+            color: black;
+        }
+
+        span {
+            color: black;
+        }
+
+        .set-goal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .set-goal>span {
+            width: calc(50% - 0.5ch);
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .set-goal .separator {
+            width: 1ch;
+            text-align: center;
+            color: dodgerblue;
+        }
+
+        .background-container {
+            background-color: dodgerblue;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            min-height: calc(100vh - 11em);
+            padding: 1em;
+            overflow: hidden;
+        }
+
+        .goals-page-heading {
+            text-align: center;
+        }
+
+        .goals-help {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border: 2px solid dodgerblue;
+            box-sizing: border-box;
+        }
+
+        .goals-help h3 {
+            margin-top: 0;
+        }
+
+        .goals-help p {
+            margin-bottom: 0;
+        }
+
+        .goals-help-container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        #main-form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Goals</h1>
+    </header>
+
+    <button class="menu-button" onclick="toggleNav()">Menu</button>
+
+    <nav id="sideNav">
+        <a href="home.html">Home</a>
+        <a href="getting_started.html">Getting Started</a>
+        <a href="Dashboard.html">Dashboard</a>
+        <a href="BMI_Calculator.html">BMI Calculator</a>
+        <a href="workout_tracker.html">Workout Tracker</a>
+        <a href="calorie_tracker.html">Calorie Tracker</a>
+        <a href="hydration_tracker.html">Hydration Tracker</a>
+        <a href="sleep_tracker.html">Sleep Tracker</a>
+        <a href="goals_page.html">Goals</a>
+        <a href="about_us.html">About Us</a>
+    </nav>
+
+
+    <main id="main-form">
+        <!--Explanation of the Goals Page-->
+        <section>
+            <h2 class="goals-page-heading">Welcome to the Goals Page</h2>
+            <div class="goals-help-container">
+                <!--Textboxes-->
+                <div class="goals-help">
+                    <h3>What is the Goals Page:</h3>
+                    <p>With the Goals Page you are able to set your Workout Goals.</p>
+                </div>
+
+                <div class="goals-help">
+                    <h3>How to use the Goals Page:</h3>
+                    <p>Fill out the Form Below and Set Your Goals</p>
+                </div>
+
+                <div class="goals-help">
+                    <h3>How Does It Keep Track of Your Goals?:</h3>
+                    <p>The Goal you set is compared with what you put in the Workout Tracker to Calculate your Progress
+                        in Completing Your Goal</p>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+
+        <h2>Setting Goals</h2>
+        <form id="goalset">
+            <label for="goalType">Goal Type:</label>
+            <select id="goalType" onchange="toggleGoalFields()">
+                <option value="" selected>Select Goal Type</option>
+                <!--<option value="exercise">Exercise Goal</option> -->
+                <option value="strength">Strength Goal</option>
+                <option value="cardio">Cardio Goal</option>
+                <!--<option value="weightLoss">Weight Loss Goal</option> -->
+                <option value="other">Other Goal</option>
+            </select>
+
+            <div id="strength" style="display: none;">
+                <label for="strengthWorkout">Enter Your Strength Goal:</label>
+                <select id="strengthWorkout" name="strengthWorkout" required>
+                    <option value="Pushups">Pushups</option>
+                    <option value="Sit-ups">Sit-ups</option>
+                    <option value="Curl Ups">Curl Ups</option>
+                    <option value="Pullups">Pullups</option>
+                    <option value="Bicep Curls">Bicep Curls</option>
+                    <option value="Crunches">Crunches</option>
+                    <option value="Squats">Squats</option>
+                </select>
+
+                <label for="reps">Reps You Want to Complete:</label>
+                <input type="number" id="reps" name="reps" placeholder="Enter the number of reps" required>
+            </div>
+
+
+            <div id="cardio" style="display: none;">
+                <label for="cardioWorkout">Enter Your Cardio Goal:</label>
+                <select id="cardioWorkout" name="cardioWorkout" required>
+                    <option value="Treadmill">Treadmill</option>
+                    <option value="Elliptical">Elliptical</option>
+                    <option value="Cycling">Cycling</option>
+                    <option value="Swimming">Swimming</option>
+                    <!--<option value="Stair Climbing">Stair Climbing</option> -->
+                </select>
+                <label for="distance">Distance You Want to Reach (in miles):</label>
+                <input type="number" id="distance" name="distance" placeholder="Enter the distance you did (in miles)"
+                    required>
+            </div>
+
+            <!--<label for="goalDescription">Goal Description:</label>
+                <input type="text" id="goalDescription" required> -->
+            </div>
+
+            <!--<div id="weightLossFields" style="display:none;">
+                <label for="calories">Calories per Day:</label>
+                <input type="number" id="calories" min="0" required>
+            </div> -->
+
+            <div id="otherGoalFields" style="display:none;">
+                <label for="otherGoalDescription">Goal Description:</label>
+                <input type="text" id="otherGoalDescription" required>
+            </div>
+
+            <!--<button type="button" onclick="setGoal()">Set Goal</button> -->
+            <button id="set" type="button">Set Goal</button>
+        </form>
+
+
+
+
+
+        <h2>Your Goals</h2>
+        <ul id="goal-list"></ul>
+
+        <!--This next section will be temporairy until the workout tracker is complete-->
+        <br><br>
+        <!--<div id="weightLossFields" style="display:none;">
+            <label for="calories">Calories per Day:</label>
+            <input type="number" id="calories" min="0" required>
+        </div> -->
+
+
+        <h2>Progress Towards Goals</h2>
+        <ul id="progress-list"></ul>
+
+
+
+    </main>
+
+
+
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        // Firebase Database
+        import { getDatabase, ref, get, push, child, onValue, remove, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBW3CX2hQ-yPA_FgE4i_EEWfh3t7WlSo10",
+            authDomain: "fitforge-e1aad.firebaseapp.com",
+            databaseURL: "https://fitforge-e1aad-default-rtdb.firebaseio.com",
+            projectId: "fitforge-e1aad",
+            storageBucket: "fitforge-e1aad.appspot.com",
+            messagingSenderId: "906048640159",
+            appId: "1:906048640159:web:a35fdf58a9d83edbd43eaa"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth();
+
+        var currentUser = {};
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                var email = user.email;
+                console.log("User ID is: " + user.uid);
+
+                currentUser = user;
+                console.log(currentUser.email + " is logged in");
+
+                //if there are already goals that the user put in the database, display it through getGoals() function
+                getGoals(user.uid);
+
+                trackGoals(user.uid);
+
+            } else {
+                //The User is signed out
+                console.log("User is not logged in");
+            }
+        });
+
+
+        //This function takes the Goal Type and creates a list where the values filled in the fields are appended to the list.
+        async function setGoal() {
+            var goalType = document.getElementById("goalType").value;
+            var goalList = document.getElementById("goal-list");
+            var formattedDate = new Date().toLocaleDateString();
+
+            var setButton = document.querySelector("#set")
+
+            if (goalType) {
+                var userID = currentUser.uid;
+                var goalData = {};
+
+                var listItem = document.createElement("li");
+                listItem.className = "set-goal";
+
+                //Determines which type of Goal is being set(Weight Loss, Exercise Goal, Other Goal) based on the drop down list selection.
+                //Based on that, it knows what should be appended to the list.
+                switch (goalType) {
+                    case "strength":
+                        var strengthMachine = document.getElementById("strengthWorkout").value;
+                        //var weight = document.getElementById("weight").value;
+                        var reps = document.getElementById("reps").value;
+                        //var goalDescription = document.getElementById("goalDescription").value;
+                        listItem.innerHTML = `<span>Strength Workout: ${strengthMachine}</span> - <span>Reps: ${reps}</span> - <span>Set on ${formattedDate}</span>`;
+
+                        goalData = {
+                            type: "strength",
+                            //description: goalDescription,
+                            strengthMachine: strengthMachine,
+                            reps: reps,
+                            date: formattedDate
+                        };
+                        break;
+
+
+
+                    case "cardio":
+                        var cardioMachine = document.getElementById("cardioWorkout").value;
+                        var distance = document.getElementById("distance").value;
+                        //var goalDescription = document.getElementById("goalDescription").value;
+                        listItem.innerHTML = `<span>Cardio: ${cardioMachine} - Distance: ${distance}</span> - <span>Set on ${formattedDate}</span>`;
+
+                        goalData = {
+                            type: "cardio",
+                            //description: goalDescription,
+                            cardioMachine: cardioMachine,
+                            distance: distance,
+                            date: formattedDate
+                        };
+                        break;
+
+                    case "weightLoss":
+                        var calories = document.getElementById("calories").value;
+                        listItem.innerHTML = `<span>Weight Loss Goal - Target Calories: ${calories} per day</span> - <span>Set on ${formattedDate}</span>`;
+                        goalData = {
+                            type: "weightLoss",
+                            caloriesPerDay: calories,
+                            date: formattedDate
+                        };
+                        break;
+
+                    case "other":
+                        var otherGoalDescription = document.getElementById("otherGoalDescription").value;
+                        listItem.innerHTML = `<span>${otherGoalDescription}</span> - <span>Set on ${formattedDate}</span>`;
+                        goalData = {
+                            type: "other",
+                            description: otherGoalDescription,
+                            date: formattedDate
+                        };
+                        break;
+                    default:
+                        break;
+                }
+
+                //path. change the /Goals to what you need it to be on your web page
+                var userGoalsRef = ref(db, 'Users/' + userID + '/Goals');
+
+                //Push the goal data under the user's goals
+                push(userGoalsRef, goalData)
+                    .then(() => {
+                        console.log('Goal added successfully');
+                    })
+                    .catch((error) => {
+                        console.error('Error adding goal: ', error);
+                    });
+
+                //goalList.appendChild(listItem);
+
+                // Reset input fields
+                //document.getElementById("goalDescription").value = "";
+                //document.getElementById("calories").value = "";
+                document.getElementById("otherGoalDescription").value = "";
+            }
+        }
+
+        //display the goals that are currently in the database
+        function getGoals(userID) {
+            var userGoalsRef = ref(db, 'Users/' + userID + '/Goals');
+            onValue(userGoalsRef, (snapshot) => {
+                const goals = snapshot.val();
+                if (goals) {
+                    const goalList = document.getElementById("goal-list");
+                    goalList.innerHTML = "";
+                    Object.values(goals).forEach((goal) => {
+                        const listItem = document.createElement("li");
+                        listItem.className = "set-goal";
+                        switch (goal.type) {
+                            case "strength":
+                                listItem.innerHTML = `<span>Exercise: ${goal.strengthMachine} - Reps: ${goal.reps}</span> - <span>Set on ${goal.date}</span>`;
+                                break;
+                            case "cardio":
+                                listItem.innerHTML = `<span>Cardio: ${goal.cardioMachine} - Distance: ${goal.distance} </span> - <span>Set on ${goal.date}</span>`;
+                                break;
+                            case "weightLoss":
+                                listItem.innerHTML = `<span>Weight Loss Goal - Target Calories: ${goal.caloriesPerDay} per day</span> - <span>Set on ${goal.date}</span>`;
+                                break;
+                            case "other":
+                                listItem.innerHTML = `<span>${goal.description}</span> - <span>Set on ${goal.date}</span>`;
+                                break;
+                            default:
+                                break;
+                        }
+                        goalList.appendChild(listItem);
+                    });
+                }
+            });
+
+        }
+
+
+
+        function trackGoals(userID) {
+            var userGoalsRef = ref(db, 'Users/' + userID + '/Goals');
+            var userWorkoutsRef = ref(db, 'Users/' + userID + '/Workouts');
+
+            //Fetch goals data
+            get(userGoalsRef).then((goalsSnapshot) => {
+                //Fetch workouts data
+                get(userWorkoutsRef).then((workoutsSnapshot) => {
+                    //Clear the existing progress list
+                    var progressList = document.getElementById("progress-list");
+                    progressList.innerHTML = "";
+
+                    //Go through each goal there is 
+                    goalsSnapshot.forEach((goal) => {
+                        var goalData = goal.val();
+
+                        var repsGoal = parseInt(goalData.reps);
+
+                        var strengthGoal = goalData.strengthMachine;
+                        var weightGoal = parseInt(goalData.weight);
+
+                        var cardioGoal = goalData.cardioMachine;
+                        var distanceGoal = parseInt(goalData.distance);
+
+                        //Initialize the progress message
+                        var progressMessage = "";
+
+                        //Find corresponding workout data
+                        workoutsSnapshot.forEach((workout) => {
+                            var workoutData = workout.val();
+                            /*var exerciseWorkout = workoutData.workout; */
+                            var repsDone = parseInt(workoutData.reps);
+
+                            var strengthWorkout = workoutData.workout;
+
+                            var cardioWorkout = workoutData.workout;
+                            var distanceDone = workoutData.distance;
+
+                            var goalAchieved = false;
+
+                            //console.log("Reps Goal:", repsGoal);
+                            //console.log("Reps Done:", repsDone);
+
+                            // If strength types match, compare reps because thats what we do for strength 
+                            if (strengthGoal === strengthWorkout) {
+                                if (repsDone >= repsGoal) {
+                                    progressMessage = 'Congratulations! You achieved your goal for ' + strengthGoal;
+                                    goalAchieved = true;
+
+                                } else {
+                                    progressMessage = strengthGoal + ": " + (repsGoal - repsDone) + " reps left to achieve your goal for " + strengthGoal;
+                                    repsGoal = repsGoal - repsDone;
+                                }
+                            }
+                            /*else if (strengthGoal !== "") {
+                                progressMessage = "You haven't made any progress on your strength goal.";
+                                goalAchieved = false;
+                             } */
+
+
+                            //for cardio we want to compare distance
+                            if (cardioGoal === cardioWorkout) {
+                                if (distanceDone >= distanceGoal) {
+                                    progressMessage = "Congratulations! You achieved your goal for " + cardioGoal;
+                                    goalAchieved = true;
+
+                                } else {
+                                    progressMessage = cardioGoal + ": " + (distanceGoal - distanceDone) + " miles left to achieve your goal for " + cardioGoal;
+                                    distanceGoal = distanceGoal - distanceDone;
+                                }
+                            }
+                            /*else if (cardioGoal !== "") {
+                                progressMessage = "You haven't made any progress on your strength goal.";
+                             } */
+
+                            if (goalAchieved) {
+                                //Update completion status of workout entry
+                                var updatedWorkoutData = { ...workoutData, completion: true };
+
+                                //Get reference to specific workout entry
+                                var specificWorkoutRef = ref(db, "Users/" + userID + "/Workouts/" + workout.key);
+
+                                //Update database with the specific workout entry
+                                set(specificWorkoutRef, updatedWorkoutData).then(() => {
+                                    console.log("Workout entry updated successfully");
+                                }).catch((error) => {
+                                    console.error("Error updating the workout entry: ", error);
+                                });
+
+                                // Pass the goal reference to removeGoal function
+                                removeGoal(ref(db, 'Users/' + userID + '/Goals/' + goal.key));
+                            }
+                        });
+
+
+                        //Appends progressMessage to the progressList
+                        if (progressMessage !== null && progressMessage !== "") { //this if statement stops it from printing blank lines that has no workout progress to compare to that goal
+                            var listItem = document.createElement("li");
+                            listItem.textContent = progressMessage;
+                            progressList.appendChild(listItem);
+                        }
+                    });
+                }).catch((error) => {
+                    console.error("Error fetching workouts data: ", error);
+                });
+            }).catch((error) => {
+                console.error("Error fetching goals data: ", error);
+            });
+        }
+
+        //this function removes a goal from the database when it is completed. A completed goal no longer needs to be tracked ands stored. 
+        function removeGoal(goalRef) {
+            remove(goalRef).then(() => {
+                console.log("Goal removed successfully");
+            }).catch((error) => {
+                console.error("Error removing the goal: ", error);
+            });
+        }
+
+
+        document.getElementById("set").addEventListener("click", function () {
+            setGoal();
+            trackGoals(currentUser.uid);
+        });
+
+        window.addEventListener("load", function () {
+            if (currentUser.uid) {
+                trackGoals(currentUser.uid);
+            }
+        });
+
+    </script>
+    <script>
+
+        //This function hides the Goal Type fields which are not selected in the drop down list
+        function toggleGoalFields() {
+            var goalType = document.getElementById("goalType").value;
+            var strengthFields = document.getElementById("strength");
+            var cardioFields = document.getElementById("cardio");
+            //var weightLossFields = document.getElementById("weightLossFields");
+            var otherGoalFields = document.getElementById("otherGoalFields");
+
+            if (goalType === "strength") {
+                strengthFields.style.display = "block"; //show strength fields
+                cardioFields.style.display = "none"; //do not show cardio field
+                //weightLossFields.style.display = "none";
+                otherGoalFields.style.display = "none";
+            } else if (goalType === "cardio") {
+                strengthFields.style.display = "none";
+                cardioFields.style.display = "block";
+                //weightLossFields.style.display = "none";
+                otherGoalFields.style.display = "none";
+            } else if (goalType === "weightLoss") {
+                strengthFields.style.display = "none";
+                cardioFields.style.display = "none";
+                //weightLossFields.style.display = "block";
+                otherGoalFields.style.display = "none";
+            } else if (goalType === "other") {
+                strengthFields.style.display = "none";
+                cardioFields.style.display = "none";
+                //weightLossFields.style.display = "none";
+                otherGoalFields.style.display = "block";
+            } else {
+                strengthFields.style.display = "none";
+                cardioFields.style.display = "none";
+                //weightLossFields.style.display = "none";
+                otherGoalFields.style.display = "none";
+            }
+        }
+
+        //Prevent users from being able to add negative numbers and other weird characters to the input fields we want numbers for by using restrictToNumbers() on input
+        document.getElementById("reps").addEventListener("input", restrictToNumbers);
+        //document.getElementById("calories").addEventListener("input", restrictToNumbers);
+        document.getElementById("distance").addEventListener("input", restrictToNumbers);
+
+        //This function restricts input to numbers only
+        function restrictToNumbers(event) {
+            // Get the input value and remove any non-numeric characters
+            let inputValue = event.target.value.replace(/[^0-9]/g, "");
+            // Update the input field value
+            event.target.value = inputValue;
+        }
+
+
+        //Opens Sidebar
+        function toggleNav() {
+            document.getElementById("sideNav").classList.toggle("open");
+        }
+
+        // Close sidebar when clicking outside of it
+        document.addEventListener('click', function (event) {
+            var sideNav = document.getElementById("sideNav");
+            var menuButton = document.querySelector('.menu-button');
+            var isClickInsideNav = sideNav.contains(event.target);
+            var isClickInsideButton = menuButton.contains(event.target);
+            if (!isClickInsideNav && !isClickInsideButton) {
+                sideNav.classList.remove('open');
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+        }
+
+        .about-section {
+            padding: 50px;
+            text-align: center;
+            background-color: black;
+            color: dodgerblue;
+        }
+
+        .container {
+            padding: 0 16px;
+        }
+
+        .title {
+            color: grey;
+        }
+
+        .button {
+            border: none;
+            outline: 0;
+            display: inline-block;
+            padding: 8px;
+            color: white;
+            background-color: #000;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+        }
+
+            .button:hover {
+                background-color: #555;
+            }
+
+        .column {
+            float: left;
+            width: 33.3%;
+            margin-bottom: 16px;
+            padding: 0 8px;
+        }
+
+        .card {
+            /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);*/
+            box-shadow: 10px 5px 5px dodgerblue;
+            margin: 8px;
+           
+        }
+
+        nav {
+            background-color: dodgerblue;
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 30px; /* Adjusted top padding */
+            left: -200px;
+            transition: left 0.3s ease;
+        }
+
+            nav.open {
+                left: 0;
+            }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                margin: 10px 10px 0; /* Adjusted margin */
+                display: block;
+                padding: 10px 0;
+            }
+
+        .menu-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="about-section">
+        <h1>About Us Page</h1>
+        <p>Some text about who we are and what we do.</p>
+        <p>We are a group of Passionate Engineers who want to help you guys improve your health and lifestyle.
+        <p>Meet the team The Forgers. </p>
+    </div>
+
+    <button class="menu-button" onclick="toggleNav()">Menu</button>
+
+    <nav id="sideNav">
+        <a href="home.html">Home</a>
+        <a href="getting_started.html">Getting Started</a>
+        <a href="Dashboard.html">Dashboard</a>
+        <a href="BMI_Calculator.html">BMI Calculator</a>
+        <a href="workout_tracker.html">Workout Tracker</a>
+        <a href="calorie_tracker.html">Calorie Tracker</a>
+        <a href="hydration_tracker.html">Hydration Tracker</a>
+        <a href="sleep_tracker.html">Sleep Tracker</a>
+        <a href="goals_page.html">Goals</a>
+        <a href="about_us.html">About Us</a>
+    </nav>
+
+    <h2 style="text-align:center">Our Team</h2>
+    <div class="row">
+        <div class="column">
+            <div class="card">
+                <!--img src="/w3images/team1.jpg" alt="Jane" style="width:100%"-->
+                <div class="container">
+                    <h2>Brandon Anup</h2>
+                    <p class="title">CEO & Founder</p>
+                    <p>One of the founders of The Forgers.</p>
+                    <p>Brandon@example.com</p>
+                    <p><button class="button" onclick="window.location.href = 'test_contact_form.html';">Contact</button></p>
+                </div>
+            </div>
+        </div>
+        <!-- Repeat similar card structures for other team members -->
+    </div>
+    <div class="row">
+        <div class="column">
+            <div class="card">
+                <!--img src="/w3images/team1.jpg" alt="Jane" style="width:100%"-->
+                <div class="container">
+                    <h2>John Calia</h2>
+                    <p class="title">CEO & Founder</p>
+                    <p>Senior Engineer of The Forgers.</p>
+                    <p>John@example.com</p>
+                    <p><button class="button" onclick="window.location.href = 'test_contact_form.html';">Contact</button></p>
+                </div>
+            </div>
+        </div>
+        <!-- Repeat similar card structures for other team members -->
+    </div>
+    <div class="row">
+        <div class="column">
+            <div class="card">
+                <!--img src="/w3images/team1.jpg" alt="Jane" style="width:100%"-->
+                <div class="container">
+                    <h2>Kevin Sun </h2>
+                    <p class="title">CEO & Founder</p>
+                    <p>Senior Engineer of The Forgers.</p>
+                    <p>Kevin@example.com</p>
+                    <p><button class="button" onclick="window.location.href = 'test_contact_form.html';">Contact</button></p>
+                </div>
+            </div>
+        </div>
+        <!-- Repeat similar card structures for other team members -->
+    </div>
+    <div class="row">
+        <div class="column">
+            <div class="card">
+                <!--img src="/w3images/team1.jpg" alt="Jane" style="width:100%"-->
+                <div class="container">
+                    <h2>Sheraz Siddiqi</h2>
+                    <p class="title">CEO & Founder</p>
+                    <p>Who is this guy?</p>
+                    <p>Sherazsiddiqi40@example.com</p>
+                    <p><button class="button" onclick="window.location.href = 'test_contact_form.html';">Contact</button></p>
+                </div>
+            </div>
+        </div>
+        <!-- Repeat similar card structures for other team members -->
+    </div>
+    <div class="row">
+        <div class="column">
+            <div class="card">
+                <!--img src="/w3images/team1.jpg" alt="Jane" style="width:100%"-->
+                <div class="container">
+                    <h2>William Mung</h2>
+                    <p class="title">CEO & Founder</p>
+                    <p>Top Dog.</p>
+                    <p>William@example.com</p>
+                    <p><button class="button" onclick="window.location.href = 'test_contact_form.html';">Contact</button></p>
+                </div>
+            </div>
+            <!-- Repeat similar card structures for other team members -->
+        </div>
+
+        <script>
+
+            function toggleNav() {
+                document.getElementById("sideNav").classList.toggle("open");
+            }
+
+            // Close sidebar when clicking outside of it
+            document.addEventListener('click', function (event) {
+                var sideNav = document.getElementById("sideNav");
+                var menuButton = document.querySelector('.menu-button');
+                var isClickInsideNav = sideNav.contains(event.target);
+                var isClickInsideButton = menuButton.contains(event.target);
+                if (!isClickInsideNav && !isClickInsideButton) {
+                    sideNav.classList.remove('open');
+                }
+            });
+
+        </script>
+
+</body>
+</html>
+

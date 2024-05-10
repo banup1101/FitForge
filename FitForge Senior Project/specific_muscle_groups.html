@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Specific Muscle Groups</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('Media/workout_tutorials_background3.jpeg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        header, footer {
+            background-color: black;
+            color: dodgerblue;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            color: #007bff;
+            text-decoration: underline; /* Underline the headings */
+        }
+
+        .video-container {
+            display: none;
+        }
+
+            .video-container iframe {
+                width: 100%;
+                height: 300px;
+            }
+
+        nav {
+            background-color: dodgerblue;
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 30px; /* Adjusted top padding */
+            left: -200px;
+            transition: left 0.3s ease;
+        }
+
+            nav.open {
+                left: 0;
+            }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                margin: 10px 10px 0; /* Adjusted margin */
+                display: block;
+                padding: 10px 0;
+            }
+
+        .menu-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Specific Muscle Groups</h1>
+    </header>
+
+    <button class="menu-button" onclick="toggleNav()">Menu</button>
+    <nav id="sideNav">
+        <a href="home.html">Home</a>
+        <a href="getting_started.html">Getting Started</a>
+        <a href="Dashboard.html">Dashboard</a>
+        <a href="BMI_Calculator.html">BMI Calculator</a>
+        <a href="workout_tracker.html">Workout Tracker</a>
+        <a href="calorie_tracker.html">Calorie Tracker</a>
+        <a href="hydration_tracker.html">Hydration Tracker</a>
+        <a href="sleep_tracker.html">Sleep Tracker</a>
+        <a href="goals_page.html">Goals</a>
+        <a href="about_us.html">About Us</a>
+    </nav>
+
+    <main>
+
+        <p style="font-size: 1.4em;"><strong><u>Don't know how to do an exercise? Click an exercise below for a tutorial.</u></strong></p>
+
+        <h2>Chest Exercises</h2>
+        <ul>
+            <li>Bench Press</li>
+            <li>Incline Bench Press</li>
+            <li>Push-ups</li>
+            <li>Incline Push-Ups</li>
+            <li>Cable Flies</li>
+            <li>Low Cable Flies</li>
+            <li>Pectoral Machine Flies</li>
+        </ul>
+
+        <h2>Back Exercises</h2>
+        <ul>
+            <li onclick="toggleVideo('latPulldown')">
+                Lat Pulldown
+                <div id="latPulldown" class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/XUAhid_2jzE" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </li>
+            <li onclick="toggleVideo('seatedRows')">
+                Seated Rows
+                <div id="seatedRows" class="video-container">
+                    <iframe width="560" height="315" src="https://youtube.com/embed/zv6aUsPXcoI" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </li>
+            <li>Dumbell Rows</li>
+            <li>T-Bar Rows</li>
+            <li>Lat Pullovers</li>
+            <li>Deadlifts</li>
+        </ul>
+
+        <h2>Shoulder Exercises</h2>
+        <ul>
+            <li>Shouler Press</li>
+            <li>Lateral Raises</li>
+            <li>Frontal Raises</li>
+            <li>Military Press</li>
+            <li>Rear Delt Flies</li>
+            <li>Face Pulls</li>
+        </ul>
+
+        <h2>Bicep Exercises</h2>
+        <ul>
+            <li>Bicep Curls</li>
+            <li onclick="toggleVideo('hammerCurls')">
+                Hammer Curls
+                <div id="hammerCurls" class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/8VUXJPTB2ro" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </li>
+            <li onclick="toggleVideo('preacherCurls')">
+                Preacher Curls
+                <div id="preacherCurls" class="video-container">
+                    <iframe width="560" height="315" src="Media/preachercurls.mp4" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </li>
+            <li>EZ Bar Curls</li>
+            <li>Spider Curls</li>
+            <li>Zottomon Curls</li>
+        </ul>
+
+        <h2>Tricep Exercises</h2>
+        <ul>
+            <li>Tricep Extensions</li>
+            <li>Overhead Extensions</li>
+            <li>Tricep Kickbacks</li>
+            <li>Single Arm Extensions</li>
+            <li>Push-ups</li>
+        </ul>
+
+        <h2>Leg Exercises</h2>
+        <ul>
+            <li onclick="toggleVideo('squats')">
+                Squats
+                <div id="squats" class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/r--GizA8FzU" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </li>
+            <li>Leg Extensions</li>
+            <li>Leg Curls</li>
+            <li>Leg Press</li>
+            <li>Bulgarian Split Squats</li>
+            <li onclick="toggleVideo('romanianDeadlifts')">
+                Romanian Deadlifts (RDL's)
+                <div id="romanianDeadlifts" class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/_CYKepEsYq0" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </li>
+            <li>Hip Thrusts</li>
+            <li>Calf Raises</li>
+        </ul>
+
+        <h2>Core Exercises</h2>
+        <ul>
+            <li>Crunches</li>
+            <li>Russian Twists</li>
+            <li>Leg Raises</li>
+            <li>Heel Touches</li>
+            <li>Flutter Kicks</li>
+            <li>Scissor Kicks</li>
+            <li>Mountain Climbers</li>
+            <li>Bicycle Crunches</li>
+            <li>Reverse Crunches</li>
+            <li>Hip Dips</li>
+            <li>Planks</li>
+        </ul>
+
+    </main>
+
+    <script>
+        function toggleVideo(videoId) {
+            var videoContainer = document.getElementById(videoId);
+            if (videoContainer.style.display === "block") {
+                videoContainer.style.display = "none";
+            } else {
+                videoContainer.style.display = "block";
+            }
+        }
+
+        // Toggle sidebar function
+        function toggleNav() {
+            document.getElementById("sideNav").classList.toggle("open");
+        }
+
+        // Close sidebar when clicking outside of it
+        document.addEventListener('click', function (event) {
+            var sideNav = document.getElementById("sideNav");
+            var menuButton = document.querySelector('.menu-button');
+            var isClickInsideNav = sideNav.contains(event.target);
+            var isClickInsideButton = menuButton.contains(event.target);
+            if (!isClickInsideNav && !isClickInsideButton) {
+                sideNav.classList.remove('open');
+            }
+        });
+
+    </script>
+
+</body>
+</html>

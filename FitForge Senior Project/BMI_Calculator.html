@@ -1,0 +1,477 @@
+﻿﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <!-- This script allows the use of chart.js so the BMI data can be displayed in a graph -->
+    <script src="https://unpkg.com/chart.js"></script>
+    <style>
+        /* Selects All Elements */
+        * {                     
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-y: auto; /* This enables vertical scrolling */
+            background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),url(Media/background.jpg);
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            padding: 40px; /* Increase to add more space to content box */
+            text-align: center;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.75);
+            border-radius: 5px;
+            box-shadow: 0px 20px 30px -5px #0c0a1a;
+            max-width: 600px; /* Increasing this widens the box */
+            width: 100%;
+            margin: 20px; /* This can help better the spacing */
+        }
+
+        .content h1 {
+            font-size: 32px;
+            margin-top: 20px;
+        }
+
+        .content p {
+            margin: 10px auto;
+            font-weight: 100;
+            line-height: 1.5;
+        }
+
+        /* BMI Chart Container Edits */
+        .bmiChartContainer {
+            margin-top: 20px;
+        }
+
+        /* Styling for BMI Range Explanation */
+        #help {
+            margin-top: 20px;
+        }
+
+        /* Styling for the BMI calculator button */
+        .bmi-button {
+            width: 200px;
+            padding: 15px 0;
+            text-align: center;
+            margin: 20px 10px;
+            border-radius: 25px;
+            font-weight: bold;
+            border: 2px solid #141640;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .bmi-button .fill {
+            background: #141640;
+            height: 100%;
+            width: 0;
+            border-radius: 25px;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: -1;
+            transition: 0.3s;
+        }
+
+        .bmi-button:hover .fill {
+            width: 100%;
+        }
+
+        .bmi-button:hover {
+            border: none;
+        }
+
+        /* Styling for Height and Weight Input */
+        input {
+            outline: none;
+            border: none;
+            padding: 10px;
+        }
+        
+        /* Sidebar Navigation Styling */
+        #sideNav {
+            background-color: dodgerblue;
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 30px;
+            left: -200px;
+            transition: left 0.3s ease;
+        }
+
+        #sideNav.open {
+            display: block; /* Show the sidebar when it has the 'open' class */
+            left: 0; /* Move the sidebar to its final position */
+        }
+
+        #sideNav a {
+            color: white;
+            text-decoration: none;
+            margin: 10px 10px 0;
+            display: block;
+            padding: 10px 0;
+        }
+
+        .menu-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .menu-button:hover {
+            background-color: #0e102c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="banner">
+
+        <!-- This button opens and closes the sidebar -->
+        <button class="menu-button" onclick="toggleNav()">Menu</button>
+        <!-- Sidebar -->
+        <nav id="sideNav">
+            <a href="home.html">Home</a>
+            <a href="getting_started.html">Getting Started</a>
+            <a href="Dashboard.html">Dashboard</a>
+            <a href="BMI_Calculator.html">BMI Calculator</a>
+            <a href="workout_tracker.html">Workout Tracker</a>
+            <a href="calorie_tracker.html">Calorie Tracker</a>
+            <a href="hydration_tracker.html">Hydration Tracker</a>
+            <a href="sleep_tracker.html">Sleep Tracker</a>
+            <a href="goals_page.html">Goals</a>
+            <a href="about_us.html">About Us</a>
+        </nav>
+
+        <div>
+            <!-- BMI Calculator Content -->
+            <div class="content">
+                <h1>BMI Calculator</h1>
+                <p>Put in your height and weight in order to determine and track your BMI.</p>
+                <!-- Input -->
+                <p>
+                    Height (in):
+                    <input type="text" id="height"><br><span class="errors" id="height_error"></span>
+                </p>
+                <br>
+                <p>
+                    Weight (lbs):
+                    <input type="text" id="weight"><br><span class="errors" id="weight_error"></span>
+                </p>
+                <!-- Button to Track BMI -->
+                <div class="button-container">
+                    <button id="btn" class="bmi-button" type="button"><span class="fill"></span>Track BMI</button>
+                    <!-- Output -->
+                    <p id="output"></p>
+                </div>
+
+                <!-- Feedback is given here using BMI comparison function -->
+                <div id="bmiFeedback">
+                </div>
+                <!-- BMI chart displays here -->
+                <div>
+                    <canvas id="bmiChart" width="400" height="200"></canvas>
+                </div>
+
+                <br>
+                <!-- BMI Range Help -->
+                <p id="help">If your BMI is less than 18.5, it falls within the underweight range. If your BMI is 18.5 to 24.9, it falls within the Healthy Weight range. If your BMI is 25.0 to 29.9, it falls within the overweight range. If your BMI is 30.0 or higher, it falls within the obese range.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BMI Calculator Scripts using Firebase -->
+    <script type="module">
+        //Imports Firebase Database Functionalities
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, get, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        //Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBW3CX2hQ-yPA_FgE4i_EEWfh3t7WlSo10",
+            authDomain: "fitforge-e1aad.firebaseapp.com",
+            databaseURL: "https://fitforge-e1aad-default-rtdb.firebaseio.com",
+            projectId: "fitforge-e1aad",
+            storageBucket: "fitforge-e1aad.appspot.com",
+            messagingSenderId: "906048640159",
+            appId: "1:906048640159:web:a35fdf58a9d83edbd43eaa"
+        };
+
+        //Firebase Initialization
+        const firebaseApp = initializeApp(firebaseConfig);
+        const auth = getAuth(firebaseApp);
+        const db = getDatabase(firebaseApp);
+
+        //Data Initialization for other functions
+        let latestBMI;
+        let initialComparisonDone = false;
+        let bmiData = [];
+
+        //This function helps initialize the BMI app so user can fetch and receive data from firebase
+        async function initializeBMIApp() {
+            try {
+                //Awaits Firebase Authentication
+                await new Promise((resolve, reject) => {
+                    const unsubscribe = auth.onAuthStateChanged(user => {
+                        if (user) {
+                            console.log("User ID is: " + user.uid);
+                            console.log(user.email + " is logged in");
+                            resolve(user);
+                        } else {
+                            console.error('User is not logged in.');
+                            reject(new Error('User not logged in'));
+                        }
+                        unsubscribe(); //Unsubscribes from the "onAuthStateChanged" listener
+                    });
+                });
+
+                //Once the code gets to here, the user is finally logged in
+                //Next, BMI data is loaded and listeners are set up
+                const currentUser = auth.currentUser;
+                await loadBMIData(currentUser.uid);
+                listenForBMIDataChanges(); // Move this line here
+
+            } catch (error) {
+                console.error("Error initializing app:", error);
+            }
+        }
+
+        //This function listens for changes in BMI data in Firebase
+        function listenForBMIDataChanges() {
+            const bmiRef = ref(db, 'Users/' + auth.currentUser.uid + '/bmiData');
+            onChildAdded(bmiRef, (snapshot) => {
+                const newBMIData = snapshot.val();
+                updateBMIChart(newBMIData);
+            });
+        }
+
+        //This function loads the users BMI data so it can be used in the other functions(Comparison, Chart, Etc.) 
+        async function loadBMIData(userID) {
+            try {
+                const bmiRef = ref(db, 'Users/' + userID + '/bmiData');
+                const snapshot = await get(bmiRef);
+                const bmiData = snapshot.val();
+
+                if (bmiData) {
+                    const bmiEntries = Object.values(bmiData);
+                    bmiEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                    const latestBMIEntry = bmiEntries[0];
+                    latestBMI = latestBMIEntry.bmi;
+
+                    console.log("Initial latest BMI:", latestBMI);
+
+                    if (!initialComparisonDone) {
+                        initialComparisonDone = true;
+                    }
+                } else {
+                    console.log("No BMI data found.");
+                }
+            } catch (error) {
+                console.error("Error loading BMI data:", error);
+            }
+        }
+
+        //This Function Calculates the BMI and pushes it to Firebase
+        async function calculateBMI() {
+            //Parses for height, weight, and gets current date
+            var height = parseInt(document.getElementById("height").value);
+            var weight = parseInt(document.getElementById("weight").value);
+            var formattedDate = new Date().toLocaleDateString();
+
+            //Calculates BMI
+            if (!isNaN(height) && !isNaN(weight) && height > 0 && weight > 0) {
+                try {
+                    const currentBMI = (weight / (height * height)) * 703;
+                    console.log("Current BMI:", currentBMI);
+                    
+                    //If the initial comparison has been done, compare against the "currentBMI" 
+                    if (initialComparisonDone) {
+                        compareBMI(currentBMI);
+                    } else {
+                        console.log("No previous BMI data found.");
+                    }
+
+                    //Pushes the newly calculated BMI data
+                    const newBmiRef = ref(db, 'Users/' + auth.currentUser.uid + '/bmiData');
+                    push(newBmiRef, {
+                        height: height,
+                        weight: weight,
+                        bmi: currentBMI,
+                        date: formattedDate
+                    });
+
+                    //BMI Data Output
+                    document.getElementById("output").innerText = 'Your BMI is: ' + currentBMI.toFixed(2) + ' (calculated on ' + formattedDate + ')';
+                } catch (error) {
+                    console.error("Error calculating BMI:", error);
+                }
+            } else {
+                alert('Please enter valid height and weight values.');
+            }
+        }
+
+        let feedbackGiven = false; //This tracks if BMI feedback has been given or not
+        
+        //This function compares the current BMI agasinst the previous BMI and gives feedback
+        async function compareBMI(currentBMI) {
+            console.log("Latest BMI from database:", latestBMI);
+
+            let feedback = ""; //Initializes the feedback message
+
+            //Range of healthy BMI values so feeback can still be given when the user is a healthy weight
+            const healthyRangeLow = 18.5;
+            const healthyRangeHigh = 24.9;
+
+            //This checks if and how feedback should be given
+            if (!feedbackGiven || Object.keys(bmiData).length > 1) {
+                if (currentBMI >= healthyRangeLow && currentBMI <= healthyRangeHigh) {
+                    feedback = "Congratulations! Your BMI is within the healthy weight range.";
+                } else {
+                    const previousDistanceLow = Math.abs(latestBMI - healthyRangeLow);
+                    const previousDistanceHigh = Math.abs(latestBMI - healthyRangeHigh);
+                    const currentDistanceLow = Math.abs(currentBMI - healthyRangeLow);
+                    const currentDistanceHigh = Math.abs(currentBMI - healthyRangeHigh);
+ 
+                    let progressMessage = ""; //Initializes the progress feedback message
+
+                    //Actual Comparisons
+                    if ((currentDistanceLow < previousDistanceLow && currentDistanceHigh < previousDistanceHigh) || (latestBMI < healthyRangeLow && currentBMI < healthyRangeLow) || (latestBMI > healthyRangeHigh && currentBMI > healthyRangeHigh)) {
+                        progressMessage = "You're getting closer to a healthy weight since the last measurement.";
+                    } else {
+                        progressMessage = "Your BMI has moved away from a healthy weight since the last measurement. Keep working towards a healthy weight.";
+                    }
+
+                    if (currentBMI > latestBMI) {
+                        const increaseAmount = currentBMI - latestBMI;
+                        feedback = `${progressMessage} Your BMI has increased by ${increaseAmount.toFixed(2)} since the last measurement. Previous BMI: ${latestBMI.toFixed(2)}.`;
+                    } else {
+                        const decreaseAmount = latestBMI - currentBMI;
+                        feedback = `${progressMessage} Your BMI has decreased by ${decreaseAmount.toFixed(2)} since the last measurement. Previous BMI: ${latestBMI.toFixed(2)}.`;
+                    }
+                }
+
+                //Updates the feeback given into the HTML
+                document.getElementById("bmiFeedback").innerText = feedback;
+
+                //Updates to show feedback has been given
+                feedbackGiven = true;
+            }
+
+            //This updates the "latestBMI" with the "currentBMI" for subsequent calculations
+            latestBMI = currentBMI;
+        }
+
+        //This function updates the BMI chart whenever new BMI data is added to Firebase
+        function updateBMIChart(newBMIData) {
+            //This pushes the new BMI data to the bmiData array
+            bmiData.push({ date: newBMIData.date, bmi: newBMIData.bmi });
+            //Renders the updated chart
+            renderBMIChart(bmiData);
+        }
+
+        //This function renders the BMI Chart using chart.js to show change in BMI over time
+        function renderBMIChart(bmiData) {
+            const dates = bmiData.map(entry => entry.date);
+            const bmis = bmiData.map(entry => entry.bmi);
+
+            const ctx = document.getElementById('bmiChart').getContext('2d');
+
+            //Checks if there is an existing chart instance
+            if (window.myChart) {
+                window.myChart.destroy(); //If so, it destroys the existing chart
+            }
+
+            //Creates chart
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'BMI Over Time',
+                        data: bmis,
+                        backgroundColor: 'dodgerblue',
+                        borderColor: 'dodgerblue',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'BMI'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        //Event listener for BMI calculation button
+        document.getElementById("btn").addEventListener("click", calculateBMI);
+
+        //Initialize the BMI App for Firebase use
+        initializeBMIApp();
+    </script>
+
+
+
+    <!-- Misc. Functions -->
+    <script>
+        //Toggles sidebar function
+        function toggleNav() {
+            document.getElementById("sideNav").classList.toggle("open");
+        }
+
+        //Closes sidebar when clicking outside of it
+        document.addEventListener('click', function (event) {
+            var sideNav = document.getElementById("sideNav");
+            var menuButton = document.querySelector('.menu-button');
+            var isClickInsideNav = sideNav.contains(event.target);
+            var isClickInsideButton = menuButton.contains(event.target);
+            if (!isClickInsideNav && !isClickInsideButton) {
+                sideNav.classList.remove('open');
+            }
+        });
+
+        //Closes sidebar when Menu button is clicked
+        var menuItems = document.querySelectorAll('#sideNav a');
+        menuItems.forEach(function (item) {
+            item.addEventListener('click', function () {
+                document.getElementById("sideNav").classList.remove('open');
+            });
+        });
+    </script>
+</body>
+</html>

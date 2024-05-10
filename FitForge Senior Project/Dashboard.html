@@ -1,0 +1,704 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <script src="https://unpkg.com/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url(Media/DashBackground.jpg);
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            padding: 75px;
+            /* Increase padding for more space inside the box */
+            text-align: center;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.75);
+            border-radius: 5px;
+            box-shadow: 0px 20px 30px -5px #0c0a1a;
+            max-width: 1000px;
+            /* Increase max-width for a wider box */
+            width: 100%;
+            margin: 20px auto;
+            /* Center the box horizontally and add margin for better spacing */
+        }
+
+
+        .content h1 {
+            font-size: 32px;
+            margin-top: 20px;
+        }
+
+        .graph-container {
+            margin-top: 20px;
+            display: inline-block;
+            width: 48%;
+            /* Set width to 48% for two containers in a row */
+            vertical-align: top;
+        }
+
+        #sideNav {
+            background-color: dodgerblue;
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 30px;
+            /* Adjusted top padding */
+            left: -200px;
+            transition: left 0.3s ease;
+        }
+
+        #sideNav.open {
+            display: block;
+            /* Show the sidebar when it has the 'open' class */
+            left: 0;
+            /* Move the sidebar to its final position */
+        }
+
+        #sideNav a {
+            color: white;
+            text-decoration: none;
+            margin: 10px 10px 0;
+            display: block;
+            padding: 10px 0;
+        }
+
+        .menu-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .menu-button:hover {
+            background-color: #0e102c;
+        }
+
+        #calorie-chart {
+            width: 300px;
+            height: 300px;
+        }
+
+        #hydration-chart {
+            width: 300px;
+            height: 300px;
+        }
+
+        #sleep-chart {
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="banner">
+        <button class="menu-button" onclick="toggleNav()">Menu</button>
+        <nav id="sideNav">
+            <a href="home.html">Home</a>
+            <a href="getting_started.html">Getting Started</a>
+            <a href="Dashboard.html">Dashboard</a>
+            <a href="BMI_Calculator.html">BMI Calculator</a>
+            <a href="workout_tracker.html">Workout Tracker</a>
+            <a href="calorie_tracker.html">Calorie Tracker</a>
+            <a href="hydration_tracker.html">Hydration Tracker</a>
+            <a href="sleep_tracker.html">Sleep Tracker</a>
+            <a href="goals_page.html">Goals</a>
+            <a href="about_us.html">About Us</a>
+        </nav>
+        <div>
+            <div class="content">
+                <h1>User Dashboard</h1>
+                <!-- First row of charts -->
+                <div class="graph-container">
+                    <a href="BMI_Calculator.html">
+                        <p>BMI Calculator</p>
+                        <canvas id="bmiChart" width="400" height="200"></canvas>
+                    </a>
+                </div>
+                <div class="graph-container">
+                    <a href="hydration_tracker.html">
+                        <p>Hydration Tracker</p>
+                        <canvas id="hydration-chart"></canvas>
+                    </a>
+                </div>
+                <!-- Second row of charts -->
+                <div class="graph-container">
+                    <a href="calorie_tracker.html">
+                        <p>Calorie Tracker</p>
+                        <canvas id="calorie-chart"></canvas>
+                    </a>
+                </div>
+                <div class="graph-container">
+                    <a href="sleep_tracker.html">
+                        <p>Sleep Tracker</p>
+                        <canvas id="sleep-chart" width="400" height="200"></canvas>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar function
+        function toggleNav() {
+            document.getElementById("sideNav").classList.toggle("open");
+        }
+
+        // Close sidebar when clicking outside of it
+        document.addEventListener('click', function (event) {
+            var sideNav = document.getElementById("sideNav");
+            var menuButton = document.querySelector('.menu-button');
+            var isClickInsideNav = sideNav.contains(event.target);
+            var isClickInsideButton = menuButton.contains(event.target);
+            if (!isClickInsideNav && !isClickInsideButton) {
+                sideNav.classList.remove('open');
+            }
+        });
+
+        // Close sidebar when menu item is clicked
+        var menuItems = document.querySelectorAll('#sideNav a');
+        menuItems.forEach(function (item) {
+            item.addEventListener('click', function () {
+                document.getElementById("sideNav").classList.remove('open');
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js">
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, get, push, child, onValue, onChildAdded } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBW3CX2hQ-yPA_FgE4i_EEWfh3t7WlSo10",
+            authDomain: "fitforge-e1aad.firebaseapp.com",
+            databaseURL: "https://fitforge-e1aad-default-rtdb.firebaseio.com",
+            projectId: "fitforge-e1aad",
+            storageBucket: "fitforge-e1aad.appspot.com",
+            messagingSenderId: "906048640159",
+            appId: "1:906048640159:web:a35fdf58a9d83edbd43eaa"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth();
+        var currentUser = {};
+
+        let bmiData = [];
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                console.log("User ID is: " + user.uid);
+                currentUser = user;
+                console.log(currentUser.email + " is logged in");
+                //if there are already goals that the user put in the database, display it through getGoals() function
+                getCalories(user.uid);
+                getHydration(user.uid);
+                getSleep(user.uid);
+                getTotalCaloriesPerDay(user.uid);
+                getTotalFluidsPerDay(user.uid);
+                getGoalSleep(user.uid);
+            } else {
+                // User is signed out
+                console.log("User is not logged in");
+            }
+        });
+
+        //Gets the users hydration from the firebase
+        //If the user has hydration logged in the database, it adds them to a list
+        function getHydration(userID) {
+            var userHydration = ref(db, 'Users/' + userID + '/userHydration');
+            onValue(userHydration, (snapshot) => {
+                const hydration = snapshot.val();
+                if (hydration) {
+                    const hydrationList = document.getElementById("hydration-list");
+                    hydrationList.innerHTML = "";
+                    Object.values(hydration).forEach(hydrationEntry => {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `${hydrationEntry.drink}: ${hydrationEntry.hydration} ml added on ${hydrationEntry.date}`;
+                        hydrationList.appendChild(listItem);
+                    });
+                }
+            });
+
+            onValue(userHydration, (snapshot) => {
+                if (!snapshot.exists()) return; // no data? do nothing
+                const hydration = snapshot.val();
+                let chartData = {};
+                Object.values(hydration).forEach(hydrationEntry => {
+                    let ds = String(hydrationEntry.date);
+                    if (ds in chartData) {
+                        chartData[ds] += hydrationEntry.hydration;
+                    } else {
+                        chartData[ds] = hydrationEntry.hydration;
+                    }
+                });
+
+                const ctx = document.getElementById('hydration-chart');
+
+                let dates = Object.keys(chartData).map((x) => new Date(x))
+                let hydrations = Object.values(chartData);
+
+                // combine
+                var combined = []
+                for (var x = 0; x < dates.length; x++) {
+                    combined.push({
+                        date: new Date(dates[x]),
+                        hydrations: hydrations[x]
+                    })
+                }
+
+                // sort
+                combined.sort((a, b) => {
+                    return b.date < a.date ? 1 // if b should come earlier, push a to end
+                        : b.date > a.date ? -1 // if b should come later, push a to begin
+                            : 0;                   // a and b are equal (should neve )
+                });
+
+                // separate
+                for (var x = 0; x < combined.length; x++) {
+                    dates[x] = combined[x].date
+                    hydrations[x] = combined[x].hydrations
+                }
+
+                // convert dates to strings again
+                dates = dates.map(date => {
+                    const year = date.getUTCFullYear();
+                    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Month is zero-based
+                    const day = String(date.getUTCDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                });
+
+
+                var goalHydration = 0;
+                var goalRef = ref(db, 'Users/' + userID + '/goalHydration');
+                onValue(goalRef, (snapshot) => {
+                    const goal = snapshot.val();
+                    if (goal) {
+                        goalHydration = goal.goalHydration
+                    }
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: dates,
+                            datasets: [
+                                {
+                                    label: "Hydration (ml)",
+                                    data: hydrations
+                                }
+                            ]
+                        },
+                        options: {
+                            plugins: {
+                                annotation: {
+                                    annotations: {
+                                        markerLine: {
+                                            type: 'line',
+                                            yMin: goalHydration,
+                                            yMax: goalHydration,
+                                            borderColor: 'rgb(255, 99, 123)',
+                                            borderWidth: 2
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+
+            });
+        }
+
+        //Pulls the user's hydration goal from the database. If the user does not have one, it displays "You do not have a goal set."
+        function getGoalHydration(userID) {
+            var goalRef = ref(db, 'Users/' + userID + '/goalHydration');
+            var goalElement = document.getElementById('goal');
+            onValue(goalRef, (snapshot) => {
+                const goal = snapshot.val();
+                if (goal) {
+                    goalElement.innerHTML = 'Your Current Hydration Goal is: ' + goal.goalHydration + ' ml.';
+                } else {
+                    goalElement.innerHTML = 'You do not have a goal set.'
+                }
+            });
+        }
+
+        //Gets the users calories from the firebase
+        //If the user has calories logged in the database, it adds them to a list
+        function getCalories(userID) {
+            var userCalories = ref(db, 'Users/' + userID + '/userCalories');
+            onValue(userCalories, (snapshot) => {
+                const calories = snapshot.val();
+                if (calories) {
+                    const calorieList = document.getElementById("calorie-list");
+                    calorieList.innerHTML = "";
+                    Object.values(calories).forEach(calorie => {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `${calorie.food}: ${calorie.calories} calories added on ${calorie.date}`;
+                        calorieList.appendChild(listItem);
+                    });
+                }
+            });
+
+            onValue(userCalories, (snapshot) => {
+                if (!snapshot.exists()) return; // no data? do nothing
+                const calories = snapshot.val();
+                let chartData = {};
+                Object.values(calories).forEach(calorie => {
+                    let ds = String(calorie.date);
+                    if (ds in chartData) {
+                        chartData[ds] += calorie.calories;
+                    } else {
+                        chartData[ds] = calorie.calories;
+                    }
+                });
+
+                const ctx = document.getElementById('calorie-chart');
+
+                let dates = Object.keys(chartData).map((x) => new Date(x))
+                let cals = Object.values(chartData);
+
+                // combine
+                var combined = []
+                for (var x = 0; x < dates.length; x++) {
+                    combined.push({
+                        date: new Date(dates[x]),
+                        cals: cals[x]
+                    })
+                }
+
+                // sort
+                combined.sort((a, b) => {
+                    return b.date < a.date ? 1 // if b should come earlier, push a to end
+                        : b.date > a.date ? -1 // if b should come later, push a to begin
+                            : 0;                   // a and b are equal (should neve )
+                });
+
+                // separate
+                for (var x = 0; x < combined.length; x++) {
+                    dates[x] = combined[x].date
+                    cals[x] = combined[x].cals
+                }
+
+                // convert dates to strings again
+                dates = dates.map(date => {
+                    const year = date.getUTCFullYear();
+                    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Month is zero-based
+                    const day = String(date.getUTCDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                });
+
+
+                var goalCals = 0;
+                var goalRef = ref(db, 'Users/' + userID + '/goalCalories');
+                onValue(goalRef, (snapshot) => {
+                    const goal = snapshot.val();
+                    if (goal) {
+                        goalCals = goal.goalCalories
+                    }
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: dates,
+                            datasets: [
+                                {
+                                    label: "Calories",
+                                    data: cals
+                                }
+                            ]
+                        },
+                        options: {
+                            plugins: {
+                                annotation: {
+                                    annotations: {
+                                        markerLine: {
+                                            type: 'line',
+                                            yMin: goalCals,
+                                            yMax: goalCals,
+                                            borderColor: 'rgb(255, 99, 123)',
+                                            borderWidth: 2
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+
+            });
+        }
+
+        //Pulls the user's calorie goal from the database. If the user does not have one, it displays "You do not have a goal set."
+        function getGoalCalories(userID) {
+            var goalRef = ref(db, 'Users/' + userID + '/goalCalories');
+            var goalElement = document.getElementById('goal');
+            onValue(goalRef, (snapshot) => {
+                const goal = snapshot.val();
+                if (goal) {
+                    goalElement.innerHTML = 'Your Current Calorie Goal is: ' + goal.goalCalories + ' calories.';
+                } else {
+                    goalElement.innerHTML = 'You do not have a goal set.'
+                }
+            });
+        }
+
+        //Gets the user's sleep data from the firebase
+        //If the user has sleep data logged in the database, it adds them to a list
+        function getSleep(userID) {
+            var userSleep = ref(db, 'Users/' + userID + '/userSleep');
+            onValue(userSleep, (snapshot) => {
+                const sleep = snapshot.val();
+                if (sleep) {
+                    const sleepList = document.getElementById("sleep-list");
+                    sleepList.innerHTML = "";
+                    Object.values(sleep).forEach(sleepEntry => {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `${sleepEntry.mood}: ${sleepEntry.hours} hours of sleep on ${sleepEntry.date}`;
+                        sleepList.appendChild(listItem);
+                    });
+                }
+            });
+
+            onValue(userSleep, (snapshot) => {
+                if (!snapshot.exists()) return; // no data? do nothing
+                const sleep = snapshot.val();
+                let chartData = {};
+                Object.values(sleep).forEach(sleepEntry => {
+                    let ds = String(sleepEntry.date);
+                    if (ds in chartData) {
+                        chartData[ds] += sleepEntry.hours;
+                    } else {
+                        chartData[ds] = sleepEntry.hours;
+                    }
+                });
+
+                const ctx = document.getElementById('sleep-chart');
+
+                let dates = Object.keys(chartData).map((x) => new Date(x))
+                let hours = Object.values(chartData);
+
+                // combine
+                var combined = []
+                for (var x = 0; x < dates.length; x++) {
+                    combined.push({
+                        date: new Date(dates[x]),
+                        hours: hours[x]
+                    })
+                }
+
+                // sort
+                combined.sort((a, b) => {
+                    return b.date < a.date ? 1 // if b should come earlier, push a to end
+                        : b.date > a.date ? -1 // if b should come later, push a to begin
+                            : 0;                   // a and b are equal (should never happen)
+                });
+
+                // separate
+                for (var x = 0; x < combined.length; x++) {
+                    dates[x] = combined[x].date
+                    hours[x] = combined[x].hours
+                }
+
+                // convert dates to strings again
+                dates = dates.map(date => {
+                    const year = date.getUTCFullYear();
+                    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Month is zero-based
+                    const day = String(date.getUTCDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                });
+
+
+                var goalHours = 0;
+                var goalRef = ref(db, 'Users/' + userID + '/goalSleep');
+                onValue(goalRef, (snapshot) => {
+                    const goal = snapshot.val();
+                    if (goal) {
+                        goalHours = goal.goalHours
+                    }
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: dates,
+                            datasets: [
+                                {
+                                    label: "Hours of Sleep",
+                                    data: hours
+                                }
+                            ]
+                        },
+                        options: {
+                            plugins: {
+                                annotation: {
+                                    annotations: {
+                                        markerLine: {
+                                            type: 'line',
+                                            yMin: goalHours,
+                                            yMax: goalHours,
+                                            borderColor: 'rgb(255, 99, 123)',
+                                            borderWidth: 2
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+
+            });
+        }
+
+        //Pulls the user's sleep goal from the database. If the user does not have one, it displays "You do not have a goal set."
+        function getGoalSleep(userID) {
+            var goalRef = ref(db, 'Users/' + userID + '/goalSleep');
+            var goalElement = document.getElementById('goal');
+            onValue(goalRef, (snapshot) => {
+                const goal = snapshot.val();
+                if (goal) {
+                    goalElement.innerHTML = 'Your Current Sleep Goal is: ' + goal.goalHours + ' hours.';
+                } else {
+                    goalElement.innerHTML = 'You do not have a goal set.'
+                }
+            });
+        }
+
+        // Function to initialize the app
+        async function initializeBMIApp() {
+            try {
+                // Wait for Firebase authentication to initialize
+                await new Promise((resolve, reject) => {
+                    const unsubscribe = auth.onAuthStateChanged(user => {
+                        if (user) {
+                            console.log("User ID is: " + user.uid);
+                            console.log(user.email + " is logged in");
+                            resolve(user);
+                        } else {
+                            console.error('User is not logged in.');
+                            reject(new Error('User not logged in'));
+                        }
+                        unsubscribe(); // Unsubscribe from the onAuthStateChanged listener
+                    });
+                });
+
+                // If the code execution reaches here, the user is logged in
+                // Proceed with loading BMI data and setting up listeners
+                const currentUser = auth.currentUser;
+                await loadBMIData(currentUser.uid);
+                listenForBMIDataChanges();
+            } catch (error) {
+                console.error("Error initializing app:", error);
+            }
+        }
+
+        function listenForBMIDataChanges() {
+            const bmiRef = ref(db, 'Users/' + auth.currentUser.uid + '/bmiData');
+            onChildAdded(bmiRef, (snapshot) => {
+                const newBMIData = snapshot.val();
+                updateBMIChart(newBMIData);
+            });
+        }
+
+        async function loadBMIData(userID) {
+            try {
+                const bmiRef = ref(db, 'Users/' + userID + '/bmiData');
+                const snapshot = await get(bmiRef);
+                let bmiData = snapshot.val();
+
+                if (bmiData) {
+                    console.log("BMI data loaded successfully");
+                    // Clear bmiData array before adding new data
+                    bmiData = [];
+                    Object.values(bmiData).forEach(entry => updateBMIChart(entry));
+                } else {
+                    console.log("No BMI data found.");
+                }
+            } catch (error) {
+                console.error("Error loading BMI data:", error);
+            }
+        }
+
+        function updateBMIChart(newBMIData) {
+            bmiData.push({ date: newBMIData.date, bmi: newBMIData.bmi });
+            renderBMIChart();
+        }
+
+        function renderBMIChart() {
+            const dates = bmiData.map(entry => entry.date);
+            const bmis = bmiData.map(entry => entry.bmi);
+
+            const ctx = document.getElementById('bmiChart').getContext('2d');
+
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'BMI Over Time',
+                        data: bmis,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'BMI'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        initializeBMIApp();
+    </script>
+
+</body>
+
+</html>

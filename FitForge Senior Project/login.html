@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitForge Login Page</title>
+
+    <style>
+        body {
+            text-align: center;
+            background-color: black;
+        }
+
+        #findDetails {
+            margin: 0 auto;
+            width: 100%;
+            background-color: dodgerblue;
+            color: floralwhite;
+        }
+
+        input {
+            width: 120px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="findDetails">
+        <h1>FitForge Login Page</h1>
+
+        <!--<h4>Enter Your ID</h4>
+        <input id = "findID" type = "text"> <br><br> -->
+
+        <h4>Enter Your Username</h4>
+        <input id="findUsername" placeholder="Username" type="text">
+
+        <h4>Enter Your Password</h4>
+        <input id="findPassword" placeholder="Password" type="password"> <br><br>
+
+        <button id="find">Login</button> <br><br><br><br><br>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        // Firebase Database
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBW3CX2hQ-yPA_FgE4i_EEWfh3t7WlSo10",
+            authDomain: "fitforge-e1aad.firebaseapp.com",
+            databaseURL: "https://fitforge-e1aad-default-rtdb.firebaseio.com",
+            projectId: "fitforge-e1aad",
+            storageBucket: "fitforge-e1aad.appspot.com",
+            messagingSenderId: "906048640159",
+            appId: "1:906048640159:web:a35fdf58a9d83edbd43eaa"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth();
+
+        var findUsername = document.querySelector("#findUsername");
+        var findPassword = document.querySelector("#findPassword");
+
+        var findButton = document.querySelector("#find");
+
+        function findData() {
+            const username = findUsername.value;
+            const password = findPassword.value;
+
+            const usersRef = ref(db, 'Users');
+            get(usersRef)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const users = snapshot.val();
+                        let userFound = false;
+
+                        // Find the user with the provided username
+                        for (const userId in users) {
+                            const userData = users[userId];
+                            if (userData.Username === username) {
+                                // Use the corresponding email for authentication
+                                signInWithEmailAndPassword(auth, userData.Email, password)
+                                    .then((userCredential) => {
+                                        // Signed in successfully
+                                        const user = userCredential.user;
+                                        alert("Welcome " + userData.Username);
+                                        window.location.href = "home.html";
+                                    })
+                                    .catch((error) => {
+                                        // Handle login errors
+                                        alert("Incorrect Username or Password");
+                                    });
+                                userFound = true;
+                                break;
+                            }
+                        }
+
+                        if (!userFound) {
+                            alert("User not found");
+                        }
+                    } else {
+                        alert("No users in the database");
+                    }
+                })
+                .catch((error) => {
+                    alert("Error retrieving users: " + error.message);
+                });
+        }
+
+        /*
+        Event Listener, perform function onclick
+        */
+        findButton.addEventListener("click", findData);
+
+    </script>
+
+
+</body>
+
+</html>

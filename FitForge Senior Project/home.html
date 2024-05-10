@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitForge Gym</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        header {
+            background-color: black;
+            color: dodgerblue;
+            text-align: center;
+            padding: 1em;
+            position: relative; /* Add position relative for absolute positioning */
+        }
+
+        .background-container {
+            background-image: url('Media/homepage_background.jpg'); /* Specify your background image URL here */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            min-height: calc(100vh - 11em); /* Adjust as needed based on the header and footer height */
+            padding: 1em; /* Adjust as needed */
+            overflow: hidden; /* Hide any overflow content */
+            position: relative; /* Add position relative for absolute positioning */
+            z-index: 1; /* Set z-index to ensure it's behind the sidebar */
+        }
+
+        .textbox {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            overflow: hidden;
+            border: 2px solid dodgerblue; /* Add border properties */
+            padding: 10px; /* Add padding for inner content */
+            z-index: 2; /* Set z-index to ensure it's above the background container */
+        }
+
+        .quote-carousel-container {
+            border: 2px solid dodgerblue; /* Add border properties */
+            padding: 20px; /* Add padding for inner content */
+        }
+
+        .quote-carousel {
+            text-align: center;
+            width: 100%;
+        }
+
+        .quote {
+            display: none;
+        }
+
+            .quote.active {
+                display: block;
+            }
+
+        nav {
+            background-color: dodgerblue;
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 30px; /* Adjusted top padding */
+            left: -200px;
+            transition: left 0.3s ease;
+            z-index: 3; /* Set z-index to ensure it's above the carousel */
+        }
+
+            nav.open {
+                left: 0;
+            }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                margin: 10px 10px 0; /* Adjusted margin */
+                display: block;
+                padding: 10px 0;
+            }
+
+        .menu-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .login-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            padding: 20px;
+            flex-direction: column; /* Adjust to column layout */
+        }
+
+        /* Additional styling for the body types */
+        .body-types-container {
+            display: flex;
+            justify-content: space-between; /* Space them evenly */
+            align-items: center;
+            width: 80%;
+            max-width: 1000px;
+            margin: 0 auto; /* Center the container */
+            text-align: center;
+        }
+
+        .body-type {
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+            padding: 20px;
+            border: 2px solid dodgerblue;
+            width: calc(33.33% - 40px); /* Each body type occupies one-third of the container width minus padding */
+            margin-bottom: 20px;
+            box-sizing: border-box; /* Include padding and border in the width calculation */
+        }
+
+            .body-type h3 {
+                margin-top: 0;
+            }
+
+            .body-type p {
+                margin-bottom: 0;
+            }
+
+        .body-type-heading {
+            text-align: center; /* Center the heading */
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>FitForge</h1>
+        <p>Your pathway to a healthier life</p>
+
+        <a id="user" class="login-button" href="signup_page.html">Log In/Register</a>
+    </header>
+
+    <button class="menu-button" onclick="toggleNav()">Menu</button>
+
+    <nav id="sideNav">
+        <a href="getting_started.html">Getting Started</a>
+        <a href="Dashboard.html">Dashboard</a>
+        <a href="BMI_Calculator.html">BMI Calculator</a>
+        <a href="workout_tracker.html">Workout Tracker</a>
+        <a href="calorie_tracker.html">Calorie Tracker</a>
+        <a href="hydration_tracker.html">Hydration Tracker</a>
+        <a href="sleep_tracker.html">Sleep Tracker</a>
+        <a href="goals_page.html">Goals</a>
+        <a href="about_us.html">About Us</a>
+    </nav>
+
+    <div class="background-container">
+        <h2>Welcome to FitForge</h2>
+        <p>Explore our variety of exercises and personalized training programs designed to meet your fitness needs.</p>
+
+        
+        <section>
+            <h2 class="body-type-heading">Understand Your Body Type</h2>
+            <div class="body-types-container">
+                <!-- Body Type Textboxes -->
+                <div class="body-type">
+                    <h3>Ectomorph</h3>
+                    <p>Ectomorphs are characterized by a lean and slender build, with difficulty gaining muscle and weight. They tend to have fast metabolisms.</p>
+                </div>
+
+                <div class="body-type">
+                    <h3>Mesomorph</h3>
+                    <p>Mesomorphs have a naturally muscular and athletic build, with a moderate metabolism. They can gain muscle relatively easily and maintain a balanced physique.</p>
+                </div>
+
+                <div class="body-type">
+                    <h3>Endomorph</h3>
+                    <p>Endomorphs typically have a softer, rounder physique with a higher tendency to store fat. They may find it challenging to lose weight but can often build muscle effectively.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quote Textbox -->
+        <div class="textbox">
+            <div class="quote-carousel-container">
+                <div class="quote-carousel">
+                    <div class="quote active">"The only bad workout is the one that didn't happen."</div>
+                    <div class="quote">"Strive for progress, not perfection."</div>
+                    <div class="quote">"Believe in yourself and all that you are. Know that there is something inside you that is greater than any obstacle."</div>
+                    <div class="quote">"Your body can stand almost anything. It's your mind that you have to convince."</div>
+                    <div class="quote">"Success isn't always about greatness. It's about consistency. Consistent hard work gains success."</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Toggle sidebar function
+        function toggleNav() {
+            document.getElementById("sideNav").classList.toggle("open");
+        }
+
+        // Close sidebar when clicking outside of it
+        document.addEventListener('click', function (event) {
+            var sideNav = document.getElementById("sideNav");
+            var menuButton = document.querySelector('.menu-button');
+            var isClickInsideNav = sideNav.contains(event.target);
+            var isClickInsideButton = menuButton.contains(event.target);
+            if (!isClickInsideNav && !isClickInsideButton) {
+                sideNav.classList.remove('open');
+            }
+        });
+
+        // Carousel script
+        const quotes = document.querySelectorAll('.quote');
+        let index = 0;
+
+        function showNextQuote() {
+            quotes[index].classList.remove('active');
+            index = (index + 1) % quotes.length;
+            quotes[index].classList.add('active');
+        }
+
+        setInterval(showNextQuote, 7000); // Change every 7 seconds
+    </script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        // Firebase Database
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBW3CX2hQ-yPA_FgE4i_EEWfh3t7WlSo10",
+            authDomain: "fitforge-e1aad.firebaseapp.com",
+            databaseURL: "https://fitforge-e1aad-default-rtdb.firebaseio.com",
+            projectId: "fitforge-e1aad",
+            storageBucket: "fitforge-e1aad.appspot.com",
+            messagingSenderId: "906048640159",
+            appId: "1:906048640159:web:a35fdf58a9d83edbd43eaa"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth();
+
+        var currentUser = {};
+
+        auth.onAuthStateChanged((user) => {
+            const userAnchor = document.getElementById("user");
+            if (user) {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/v8/firebase.User
+                var email = user.email;
+                currentUser = user;
+                console.log(currentUser.email + " has logged in");
+                userAnchor.textContent = currentUser.email + " is logged in";
+                document.getElementById("user").addEventListener("click", function () {
+                    auth.signOut();
+                    console.log("Logged Out");
+                    alert(currentUser.email + " has logged out. Redirecting to Sign Up Page:");
+                });
+            } else {
+                // User is signed out
+                userAnchor.textContent = "Log In/Register";
+                userAnchor.href = "signup_page.html";
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>

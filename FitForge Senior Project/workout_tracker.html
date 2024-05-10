@@ -1,0 +1,510 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<!--The Workout Tracker page was created by Brandon Anup. Here the user is able to enter what they worked out and it will be stored in the database along with being displayed
+on the web page. The user will fill out a form where they select what they did and how many reps and then submit it. 
+Every time the user decides to track a Workout, it will be tracked on the date it was inputted to be tracked. In order to see what you worked out on certain
+dates there is a calendar at the bottom for you to select a date and see what you worked out on.-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            text-align: center;
+            background-image: url('Media/workout_tutorials_background3.jpeg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        header {
+            background-color: black;
+            color: dodgerblue;
+            padding: 1em;
+            text-align: center;
+            position: relative;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: black;
+        }
+
+        p {
+            line-height: 1.6;
+            color: black;
+        }
+
+        nav {
+            background-color: dodgerblue;
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 30px;
+            left: -200px;
+            transition: left 0.3s ease;
+        }
+
+        nav.open {
+            left: 0;
+        }
+
+        nav a {
+            color: white;
+            text-align: left;
+            text-decoration: none;
+            margin: 10px 10px 0;
+            display: block;
+            padding: 10px 0;
+        }
+
+        .menu-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        label {
+            color: black;
+        }
+
+        span {
+            color: black;
+        }
+
+        .set-workouts {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .set-workouts>span {
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0;
+        }
+
+        .separator {
+            color: dodgerblue;
+        }
+
+        .background-container {
+            background-image: url('homepage_background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            min-height: calc(100vh - 11em);
+            padding: 1em;
+            overflow: hidden;
+        }
+
+        #background-form {
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <header>
+        <h1>Workout Tracker</h1>
+    </header>
+
+    <button class="menu-button" onclick="toggleNav()">Menu</button>
+
+    <nav id="sideNav">
+        <a href="home.html">Home</a>
+        <a href="getting_started.html">Getting Started</a>
+        <a href="Dashboard.html">Dashboard</a>
+        <a href="BMI_Calculator.html">BMI Calculator</a>
+        <a href="workout_tracker.html">Workout Tracker</a>
+        <a href="calorie_tracker.html">Calorie Tracker</a>
+        <a href="hydration_tracker.html">Hydration Tracker</a>
+        <a href="sleep_tracker.html">Sleep Tracker</a>
+        <a href="goals_page.html">Goals</a>
+        <a href="about_us.html">About Us</a>
+    </nav>
+
+
+    <main id="background-form">
+        <!--Workout Tracker-->
+        <h1>Enter What You Worked Out On</h1>
+
+        <form id="workoutset">
+            <label for="workoutType">Select a Workout Type:</label>
+            <select id="workoutType" onchange="toggleWorkoutFields()">
+                <option value="" selected>Select Workout Type</option>
+                <!--<option value="exercise">Exercise</option> -->
+                <option value="strength">Strength</option>
+                <option value="cardio">Cardio</option>
+            </select>
+
+
+            <!-- Input fields for Exercise workout -->
+            <!-- <div id="exerciseFields" style="display: none;">
+            <label for="exerciseWorkout">Exercise:</label>
+            <input type="text" id="exerciseWorkout" name="exerciseWorkout" placeholder="Enter your exercise workout">
+            <label for="reps">Reps:</label>
+            <input type="number" id="reps" name="reps" placeholder="Enter the number of reps">
+        </div> -->
+
+            <!-- Input fields for Strength workout -->
+            <div id="strengthFields" style="display: none;">
+                <label for="strengthWorkout">Workout:</label>
+                <select id="strengthWorkout" name="strengthWorkout" required>
+                    <option value="Pushups">Pushups</option>
+                    <option value="Sit-ups">Sit-ups</option>
+                    <option value="Curl Ups">Curl Ups</option>
+                    <option value="Pullups">Pullups</option>
+                    <option value="Bicep Curls">Bicep Curls</option>
+                    <option value="Crunches">Crunches</option>
+                    <option value="Squats">Squats</option>
+                </select>
+                <label for="reps">Reps:</label>
+                <input type="number" id="reps" name="reps" placeholder="Enter the number of reps">
+            </div>
+            <!-- Input fields for Cardio workout -->
+            <div id="cardioFields" style="display: none;">
+                <label for="cardioWorkout">Cardio:</label>
+                <select id="cardioWorkout" name="cardioWorkout" required>
+                    <option value="Treadmill">Treadmill</option>
+                    <option value="Elliptical">Elliptical</option>
+                    <option value="Cycling">Cycling</option>
+                    <option value="Swimming">Swimming</option>
+                    <!--<option value="Stair Climbing">Stair Climbing</option> -->
+                </select>
+                <label for="distance">Distance (in miles):</label>
+                <input type="number" id="distance" name="distance" placeholder="Enter the distance you did (in miles)">
+            </div>
+
+            <input type="submit" id="set" value="Add Workout">
+        </form>
+
+        <br><br>
+
+
+
+        <br><br>
+        <h2>Tracked Workouts</h2>
+        <ul id="workout-list"></ul>
+
+        <div>
+            <!--Filter workouts by selected date-->
+            <label for="selectedDate">Filter By Date:</label>
+            <input type="date" id="workoutDate" name="selectedDate">
+        </div>
+    </main>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        // Firebase Database
+        import { getDatabase, ref, get, push, child, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBW3CX2hQ-yPA_FgE4i_EEWfh3t7WlSo10",
+            authDomain: "fitforge-e1aad.firebaseapp.com",
+            databaseURL: "https://fitforge-e1aad-default-rtdb.firebaseio.com",
+            projectId: "fitforge-e1aad",
+            storageBucket: "fitforge-e1aad.appspot.com",
+            messagingSenderId: "906048640159",
+            appId: "1:906048640159:web:a35fdf58a9d83edbd43eaa"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth();
+
+        var currentUser = {};
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                var email = user.email;
+                console.log("User ID is: " + user.uid);
+
+                currentUser = user;
+                console.log(currentUser.email + " is logged in");
+
+                //if there are already Workouts User put, display it
+                getWorkouts(user.uid);
+
+            } else {
+                // User is signed out
+                console.log("User is not logged in");
+            }
+        });
+
+
+        //This function takes the Workout Type and creates a list where the values filled in the fields are appended to the list.
+        async function setWorkout() {
+            var workoutType = document.getElementById("workoutType").value;
+            var workoutList = document.getElementById("workout-list");
+            var formattedDate = new Date().toLocaleDateString();
+            var completed = false;
+
+            var setButton = document.querySelector("#set")
+
+            if (workoutType) {
+                var userID = currentUser.uid;
+                var workoutData = {};
+
+                var listItem = document.createElement("li");
+                listItem.className = "set-workouts";
+
+                switch (workoutType) {
+
+                    /*case "exercise":
+                        var exercise = document.getElementById("exerciseWorkout").value;
+                        var reps = document.getElementById("reps").value;
+                        // var workoutDescription = document.getElementById("strengthWorkout").value;
+                        //listItem.innerHTML = `<span>${workoutDescription} - Strength Workout: ${strength} - Reps: ${reps}</span> - <span>Set on ${formattedDate}</span>`;
+                        listItem.innerHTML = `<span>Exercise: ${exercise} - Reps: ${reps}</span> - <span>Set on ${formattedDate}</span>`;
+
+
+                        workoutData = {
+                            type: "exerciseWorkout",
+                            workout: exercise,
+                            reps: reps,
+                            date: formattedDate,
+                            completion: completed
+                        };
+                        break; */
+
+                    case "strength":
+                        var strength = document.getElementById("strengthWorkout").value;
+                        var reps = document.getElementById("reps").value;
+                        // var workoutDescription = document.getElementById("strengthWorkout").value;
+                        //listItem.innerHTML = `<span>${workoutDescription} - Strength Workout: ${strength} - Reps: ${reps}</span> - <span>Set on ${formattedDate}</span>`;
+                        listItem.innerHTML = `<span>Strength: ${strength}</span> - <span> Reps: ${reps}</span> - <span>Set on ${formattedDate}</span>`;
+
+
+                        workoutData = {
+                            type: "strengthWorkout",
+                            workout: strength,
+                            reps: reps,
+                            date: formattedDate,
+                            completion: completed
+                        };
+                        break;
+
+                    case "cardio":
+                        var cardio = document.getElementById("cardioWorkout").value;
+                        var distance = document.getElementById("distance").value; //track cardio stuff in distance
+                        var workoutDescription = document.getElementById("cardioWorkout").value;
+                        listItem.innerHTML = `<span>Cardio Workout: ${cardio}</span> - <span> Distance: ${distance}m</span> - <span>Set on ${formattedDate}</span>`;
+
+                        workoutData = {
+                            type: "cardioWorkout",
+                            workout: cardio,
+                            distance: distance,
+                            date: formattedDate,
+                            completion: completed
+                        };
+                        break;
+                    default:
+                        break;
+                }
+
+                //Notification System if user inputs the same workout 3 times in a row it advices you to go try out something else
+                var workouts = workoutList.querySelectorAll("li");
+                var count = 0;
+
+                for (var i = 0; i < workouts.length; i++) {
+                    if (workouts[i].textContent.includes(workoutData.workout)) {
+                        count++;
+                    }
+                }
+
+                if (count >= 2) {
+                    alert("You're doing a lot of " + workoutData.workout + ". You should try something else.");
+                }
+
+                //data to firebase stuff
+                var userWorkoutsRef = ref(db, 'Users/' + userID + '/Workouts');
+
+                push(userWorkoutsRef, workoutData)
+                    .then(() => {
+                        console.log('Workout added successfully');
+                        getWorkouts(userID);
+                    })
+                    .catch((error) => {
+                        console.error('Error adding workout: ', error);
+                    });
+            }
+        }
+
+        document.getElementById("set").addEventListener("click", setWorkout);
+        //document.getElementById('workoutDate').valueAsDate = new Date();
+
+
+
+
+        //display the Workouts that are currently in the database by date
+        //this was annoying to make
+        function getWorkouts(userID, selectedDate = new Date()) {
+            // Ensure selectedDate is a Date object
+            if (!(selectedDate instanceof Date)) {
+                selectedDate = new Date(selectedDate);
+            }
+
+            //it became may 1st and then everything broke because there is no April 31st...
+            //things also became 1 day off
+            //everything somehow works now
+
+            //Sets selectedDate to midnight in UTC because that avoid time zone weirdness for some reason
+            selectedDate.setUTCHours(0, 0, 0, 0);
+
+            var userWorkoutsRef = ref(db, 'Users/' + userID + '/Workouts');
+            onValue(userWorkoutsRef, (snapshot) => {
+                const workouts = snapshot.val();
+                if (workouts) {
+                    const workoutList = document.getElementById("workout-list");
+                    workoutList.innerHTML = ""; //Clears the existing workouts
+                    Object.values(workouts).forEach((workout) => {
+                        const workoutDate = new Date(workout.date);
+                        //Set workoutDate to midnight in UTC for comparison
+                        workoutDate.setUTCHours(0, 0, 0, 0);
+                        //console.log("Selected Date:", selectedDate.toDateString());
+                        //console.log("Workout Date:", workoutDate.toDateString());
+                        if (workoutDate.getTime() === selectedDate.getTime()) {
+                            //console.log("Dates Match");
+                            const listItem = document.createElement("li");
+                            listItem.className = "set-workouts";
+                            switch (workout.type) {
+                                /*case "exerciseWorkout":
+                                    listItem.innerHTML = `<span>Exercise: ${workout.workout} - Reps: ${workout.reps}</span> - <span>Set on ${workout.date}</span>`;
+                                    break; */
+                                case "strengthWorkout":
+                                    listItem.innerHTML = `<span>Strength: ${workout.workout} - Reps: ${workout.reps} - Set on ${workout.date}</span>`;
+                                    break;
+                                case "cardioWorkout":
+                                    listItem.innerHTML = `<span>Cardio: ${workout.workout} - Distance: ${workout.distance}m - Set on ${workout.date}</span>`;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            workoutList.appendChild(listItem);
+                        }
+                    });
+                }
+            });
+        }
+
+
+        getWorkouts(currentUser.uid);
+        document.getElementById("set").addEventListener("click", setWorkout);
+
+
+
+
+        /* Display Workouts By Date */
+        function filterWorkoutsByDate() {
+            var selectedDate = document.getElementById("workoutDate").value;
+            getWorkouts(currentUser.uid, selectedDate);
+        }
+
+        document.getElementById("workoutDate").addEventListener("change", filterWorkoutsByDate);
+
+    </script>
+    <script>
+
+        //This function hides the Workout Type fields which are not selected in the drop down list
+        function toggleWorkoutFields() {
+            var workoutType = document.getElementById("workoutType").value;
+            //var exerciseFields = document.getElementById("exerciseFields");
+            var strengthFields = document.getElementById("strengthFields");
+            var cardioFields = document.getElementById("cardioFields");
+
+            // Show additional input fields based on workout type
+            /*if (workoutType === "exercise") {
+                exerciseFields.style.display = "block";
+                strengthFields.style.display = "none";
+                cardioFields.style.display = "none";
+            } */if (workoutType === "strength") {
+                //exerciseFields.style.display = "none";
+                strengthFields.style.display = "block";
+                cardioFields.style.display = "none";
+
+            } else if (workoutType === "cardio") {
+                //exerciseFields.style.display = "none";
+                strengthFields.style.display = "none";
+                cardioFields.style.display = "block";
+            }
+            else {
+                //exerciseFields.style.display = "none";
+                strengthFields.style.display = "none";
+                cardioFields.style.display = "none";
+            }
+        }
+
+        function goToHomePage() {
+            window.location.href = 'home.html';
+        }
+
+
+
+        //Adds event listeners to the input fields NO NEGATIVE NUMBERS
+        document.getElementById("reps").addEventListener("input", restrictToNumbers);
+        document.getElementById("distance").addEventListener("input", restrictToNumbers);
+
+        // Function to restrict input to numbers only
+        function restrictToNumbers(event) {
+            // Get the input value and remove any non-numeric characters
+            let inputValue = event.target.value.replace(/[^0-9]/g, "");
+            // Update the input field value
+            event.target.value = inputValue;
+        }
+
+
+
+
+        //Opens Sidebar
+        function toggleNav() {
+            document.getElementById("sideNav").classList.toggle("open");
+        }
+
+        // Close sidebar when clicking outside of it
+        document.addEventListener('click', function (event) {
+            var sideNav = document.getElementById("sideNav");
+            var menuButton = document.querySelector('.menu-button');
+            var isClickInsideNav = sideNav.contains(event.target);
+            var isClickInsideButton = menuButton.contains(event.target);
+            if (!isClickInsideNav && !isClickInsideButton) {
+                sideNav.classList.remove('open');
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>

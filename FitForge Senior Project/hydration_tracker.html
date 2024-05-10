@@ -1,0 +1,428 @@
+﻿<!DOCTYPE html>
+<!--
+ Student Name: Kevin Sun
+ File Name: hydration_tracker.html
+ Date: 5/8/24
+-->
+<html lang="en">
+
+<head>
+    <title>FitForge: Template</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-repeat: no-repeat;
+            background-image: url('Media/water.jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            color: black;
+        }
+
+        header {
+            background-color: black;
+            color: dodgerblue;
+            text-align: center;
+            padding: 1em;
+            position: relative;
+        }
+
+        main {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            margin: auto;
+        }
+
+        #hydration-form {
+            max-width: 400px;
+            margin: auto;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 0;
+        }
+
+        label,
+        h2,
+        p {
+            color: dodgerblue;
+            margin-bottom: 10px;
+        }
+
+        label {
+            font-size: 1.2em;
+            font-weight: bold;
+            display: block;
+        }
+
+        input {
+            color: black;
+            font-size: 1.2em;
+            width: calc(100% - 20px);
+            /* Adjusted width to accommodate button padding */
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        button {
+            font-weight: bold;
+        }
+
+        #hydration-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .hydration-item {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 0;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: black;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 0;
+            margin-top: 20px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+
+        nav {
+            background-color: dodgerblue;
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 30px;
+            /* Adjusted top padding */
+            left: -200px;
+            transition: left 0.3s ease;
+        }
+
+        nav.open {
+            left: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 10px 10px 0;
+            /* Adjusted margin */
+            display: block;
+            padding: 10px 0;
+        }
+
+        .menu-button {
+            position: fixed;
+            /* Changed position to fixed */
+            top: 0;
+            left: 0;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            z-index: 9999;
+            /* Ensure the button stays on top */
+        }
+
+        section {
+            padding: 20px;
+            margin-left: 0px;
+        }
+
+        #hydration-chart {
+            width: 300px;
+            height: 300px;
+        }
+
+        #goal {
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>FitForge</h1>
+            <p>Your pathway to a healthier life</p>
+        </header>
+        <button class="menu-button" onclick="toggleNav()">Menu</button>
+        <nav id="sideNav">
+            <a href="home.html">Home</a>
+            <a href="getting_started.html">Getting Started</a>
+            <a href="Dashboard.html">Dashboard</a>
+            <a href="BMI_Calculator.html">BMI Calculator</a>
+            <a href="workout_tracker.html">Workout Tracker</a>
+            <a href="calorie_tracker.html">Calorie Tracker</a>
+            <a href="hydration_tracker.html">Hydration Tracker</a>
+            <a href="sleep_tracker.html">Sleep Tracker</a>
+            <a href="goals_page.html">Goals</a>
+            <a href="about_us.html">About Us</a>
+        </nav>
+
+        <main>
+            <form id="hydration-form">
+                <label for="drink">Drink:</label>
+                <input type="text" id="drink" required>
+                <label for="hydration">Hydration (ml):</label>
+                <input type="number" min=0 id="hydration" required>
+                <label for="date">Date:</label>
+                <input type="date" id="date" required>
+                <div class="button">
+                    <button id="btn" class="hydrationTrackButton" type="button">Add Entry</button>
+                </div>
+                &nbsp
+                <label for="goal-hydration">Goal Hydration Per Day (ml):</label>
+                <input type="number" min=0 id="goal-hydration" required>
+                <div class="button">
+                    <button id="set-goal-btn" class="goalTrackButton" type="button">Set Goal</button>
+                </div>
+                <p id='goal'></p>
+                <h2>Hydration Entries</h2>
+                <canvas id="hydration-chart"></canvas>
+                <ul id="hydration-list"></ul>
+            </form>
+
+        </main>
+
+        <footer>
+            <p>&copy; Copyright 2024. All Rights Reserved.</p>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+        <script>
+            // Toggle sidebar function
+            function toggleNav() {
+                document.getElementById("sideNav").classList.toggle("open");
+            }
+            // Close sidebar when clicking outside of it
+            document.addEventListener('click', function (event) {
+                var sideNav = document.getElementById("sideNav");
+                var menuButton = document.querySelector('.menu-button');
+                var isClickInsideNav = sideNav.contains(event.target);
+                var isClickInsideButton = menuButton.contains(event.target);
+                if (!isClickInsideNav && !isClickInsideButton) {
+                    sideNav.classList.remove('open');
+                }
+            });
+        </script>
+
+        <script type="module">
+            // Importing Functions
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+            import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+            // Firebase Database
+            import { getDatabase, ref, get, push, child, onValue, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+            // Our Firebase Config
+            const firebaseConfig = {
+                apiKey: "AIzaSyBW3CX2hQ-yPA_FgE4i_EEWfh3t7WlSo10",
+                authDomain: "fitforge-e1aad.firebaseapp.com",
+                databaseURL: "https://fitforge-e1aad-default-rtdb.firebaseio.com",
+                projectId: "fitforge-e1aad",
+                storageBucket: "fitforge-e1aad.appspot.com",
+                messagingSenderId: "906048640159",
+                appId: "1:906048640159:web:a35fdf58a9d83edbd43eaa"
+            };
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase();
+            const auth = getAuth();
+            var currentUser = {};
+
+            //Checks to see if a user is logged in. If they are, it carries out the getHydration and getGoalHydration functions.
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    console.log("User ID is: " + user.uid);
+                    currentUser = user;
+                    console.log(currentUser.email + " is logged in");
+                    getHydration(user.uid);
+                    getGoalHydration(user.uid);
+                } else {
+                    console.log("User is not logged in");
+                }
+            });
+
+            //Adds hydration to the user's account in the firebase when the function is called
+            function setHydration() {
+                var hydration = parseInt(document.getElementById("hydration").value);
+                var drink = document.getElementById("drink").value;
+                var date = document.getElementById("date").value;
+                if (!drink || !hydration || !date) {
+                    alert("Please fill out all required fields.");
+                    return; // Stop further execution
+                }
+                var userID = currentUser.uid;
+                var hydrationRef = ref(db, 'Users/' + userID + '/userHydration');
+                push(hydrationRef, {
+                    hydration: hydration,
+                    drink: drink,
+                    date: date
+                });
+                location.reload();
+                alert("Hydration added successfully!");
+            }
+
+            //Gets the users hydration from the firebase
+            //If the user has hydration logged in the database, it adds them to a list
+            function getHydration(userID) {
+                var userHydration = ref(db, 'Users/' + userID + '/userHydration');
+                onValue(userHydration, (snapshot) => {
+                    const hydration = snapshot.val();
+                    if (hydration) {
+                        const hydrationList = document.getElementById("hydration-list");
+                        hydrationList.innerHTML = "";
+                        Object.values(hydration).forEach(hydrationEntry => {
+                            const listItem = document.createElement("li");
+                            listItem.textContent = `${hydrationEntry.drink}: ${hydrationEntry.hydration} ml added on ${hydrationEntry.date}`;
+                            hydrationList.appendChild(listItem);
+                        });
+                    }
+                });
+
+                onValue(userHydration, (snapshot) => {
+                    if (!snapshot.exists()) return; // no data? do nothing
+                    const hydration = snapshot.val();
+                    let chartData = {};
+                    Object.values(hydration).forEach(hydrationEntry => {
+                        let ds = String(hydrationEntry.date);
+                        if (ds in chartData) {
+                            chartData[ds] += hydrationEntry.hydration;
+                        } else {
+                            chartData[ds] = hydrationEntry.hydration;
+                        }
+                    });
+
+                    const ctx = document.getElementById('hydration-chart');
+
+                    let dates = Object.keys(chartData).map((x) => new Date(x))
+                    let hydrations = Object.values(chartData);
+
+                    // combine
+                    var combined = []
+                    for (var x = 0; x < dates.length; x++) {
+                        combined.push({
+                            date: new Date(dates[x]),
+                            hydrations: hydrations[x]
+                        })
+                    }
+
+                    // sort
+                    combined.sort((a, b) => {
+                        return b.date < a.date ? 1 // if b should come earlier, push a to end
+                            : b.date > a.date ? -1 // if b should come later, push a to begin
+                                : 0;                   // a and b are equal (should neve )
+                    });
+
+                    // separate
+                    for (var x = 0; x < combined.length; x++) {
+                        dates[x] = combined[x].date
+                        hydrations[x] = combined[x].hydrations
+                    }
+
+                    // convert dates to strings again
+                    dates = dates.map(date => {
+                        const year = date.getUTCFullYear();
+                        const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Month is zero-based
+                        const day = String(date.getUTCDate()).padStart(2, '0');
+                        return `${year}-${month}-${day}`;
+                    });
+
+
+
+                    var goalHydration = 0;
+                    var goalRef = ref(db, 'Users/' + userID + '/goalHydration');
+                    onValue(goalRef, (snapshot) => {
+                        const goal = snapshot.val();
+                        if (goal) {
+                            goalHydration = goal.goalHydration
+                        }
+
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: dates,
+                                datasets: [
+                                    {
+                                        label: "Hydration (ml)",
+                                        data: hydrations
+                                    }
+                                ]
+                            },
+                            options: {
+                                plugins: {
+                                    annotation: {
+                                        annotations: {
+                                            markerLine: {
+                                                type: 'line',
+                                                yMin: goalHydration,
+                                                yMax: goalHydration,
+                                                borderColor: 'rgb(255, 99, 123)',
+                                                borderWidth: 2
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
+
+                });
+            }
+
+            //Adds user's hydration goal to the database
+            function setGoalHydration() {
+                var goalHydration = parseInt(document.getElementById("goal-hydration").value);
+                var userID = currentUser.uid;
+                var goalRef = ref(db, 'Users/' + userID + '/goalHydration');
+                set(goalRef, {
+                    goalHydration: goalHydration
+                });
+                location.reload();
+                alert("Goal set successfully!");
+            }
+
+            //Pulls the user's hydration goal from the database. If the user does not have one, it displays "You do not have a goal set."
+            function getGoalHydration(userID) {
+                var goalRef = ref(db, 'Users/' + userID + '/goalHydration');
+                var goalElement = document.getElementById('goal');
+                onValue(goalRef, (snapshot) => {
+                    const goal = snapshot.val();
+                    if (goal) {
+                        goalElement.innerHTML = 'Your Current Hydration Goal is: ' + goal.goalHydration + ' ml.';
+                    } else {
+                        goalElement.innerHTML = 'You do not have a goal set.'
+                    }
+                });
+            }
+
+            document.getElementById("btn").addEventListener("click", setHydration);
+            document.getElementById("set-goal-btn").addEventListener("click", setGoalHydration);
+        </script>
+
+</body>
+
+</html>
